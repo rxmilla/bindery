@@ -3,7 +3,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-LBHzEl7EHPiCfbHHELmoB/iSKRebqEy+C0Z/4IA7UX0='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-a2QKPLvOBSvXkaTrJqwsiYy2eG0WxchRrfeyjSkp29w='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>Bindery</title>
 
 <style>
@@ -870,6 +870,18 @@ table.cut tr:last-child td { border-bottom: 0; }
 .linky:hover { color: var(--ink); }
 .linky.danger { color: var(--dim); margin-left: auto; }
 
+/* ============================================================ welcome === */
+.wb { padding: 30px 4px 8px; max-width: 760px; }
+.wb-art { color: var(--peacock); opacity: .85; max-width: 320px; margin: 0 0 26px; }
+.wb h2 {
+  font-family: var(--f-display); font-variation-settings: var(--vs-head);
+  font-size: 19px; color: var(--peacock); margin: 0 0 18px;
+}
+.wb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(228px, 1fr)); gap: 20px 30px; }
+.wb-grid div { display: flex; flex-direction: column; gap: 5px; }
+.wb-grid b { font-size: 15px; font-weight: 600; color: var(--ink); }
+.wb-grid span { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+
 /* ============================================================= preview === */
 .pvhead { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 .pvhead h2 { font-family: var(--f-display); font-variation-settings: var(--vs-head);
@@ -1302,13 +1314,46 @@ footer a:hover { color: var(--peacock-2); }
   <main class="main">
     <p class="sr-only" role="status" id="specsay"></p>
 
-    <section>
+    <section id="pvblock">
       <div class="pvhead">
         <h2>Preview</h2>
         <div class="pvtabs" id="pvtabs" role="group" aria-label="Which page to preview"></div>
       </div>
       <div class="stage" id="stage" aria-hidden="true"></div>
       <div class="caption" id="pvcap"></div>
+    </section>
+
+    <!-- Shown in place of the preview on the way in. A blank sheet is a poor
+         welcome; this says what the thing is for while there is nothing to see. -->
+    <section id="welcomeblock" hidden>
+      <div class="wb">
+        <div class="wb-art" aria-hidden="true">
+          <svg viewBox="0 0 260 150" width="100%" height="auto">
+            <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+              <path d="M130 26 C112 16, 84 14, 62 20 L62 122 C84 116, 112 118, 130 128 Z"/>
+              <path d="M130 26 C148 16, 176 14, 198 20 L198 122 C176 116, 148 118, 130 128 Z"/>
+              <path d="M130 26 L130 128"/>
+              <path d="M74 40 h40 M74 54 h40 M74 68 h34" stroke-width=".9" opacity=".55"/>
+              <path d="M146 40 h40 M146 54 h40 M146 68 h34" stroke-width=".9" opacity=".55"/>
+              <path d="M52 30 C44 34, 40 44, 44 54" stroke-width=".9" opacity=".5"/>
+              <path d="M208 30 C216 34, 220 44, 216 54" stroke-width=".9" opacity=".5"/>
+            </g>
+            <g fill="currentColor" opacity=".5">
+              <circle cx="130" cy="18" r="2"/><circle cx="130" cy="136" r="2"/>
+              <circle cx="130" cy="48" r="2"/><circle cx="130" cy="106" r="2"/>
+            </g>
+          </svg>
+        </div>
+        <h2>What you will end up with</h2>
+        <div class="wb-grid">
+          <div><b>Pages you decided on</b><span>Day, week and month spreads with whatever you track, a notebook ruled how you like, or a text of your own set as a book.</span></div>
+          <div><b>Sheets in folding order</b><span>Printed two pages to a side and arranged so that folding a stack puts every page in the right place.</span></div>
+          <div><b>A punching template</b><span>Marked with your sewing stations, to fold into a signature and pierce through.</span></div>
+          <div><b>A case template at 1:1</b><span>Board and cloth drawn to the spine you measure once the block is sewn.</span></div>
+          <div><b>Instructions with your numbers</b><span>Every step from printing to casing in, written around your book rather than a generic one.</span></div>
+          <div><b>Nothing sent anywhere</b><span>It runs in this browser. No account, no upload, no cost, and it works offline.</span></div>
+        </div>
+      </div>
     </section>
 
     <section>
@@ -3558,6 +3603,15 @@ function renderOuts() {
   /* While the walkthrough is running the printing lives inside the steps, so
      the standing panel would be a second, competing place to press print. */
   document.getElementById("printblock").hidden = WIZ.on;
+  /* On the way in there is nothing worth previewing, so the space explains the
+     tool instead of showing an empty sheet. */
+  const wb = document.getElementById("welcomeblock"), pv = document.getElementById("pvblock");
+  if (wb && pv) { wb.hidden = !WIZ.landing; pv.hidden = !!WIZ.landing; }
+  /* The specification counts sheets and signatures for a book nobody has asked
+     for yet, so it waits until there is one. */
+  const sp = document.getElementById("spec"), ft = document.getElementById("foot");
+  if (sp) sp.hidden = !!WIZ.landing;
+  if (ft) ft.hidden = !!WIZ.landing;
 
   document.getElementById("foot").innerHTML = S.singleSided
     ? `<b>Two-pass printing.</b> Run the duplex test first. It costs two sheets and tells you what ${D.sheets} sheets
