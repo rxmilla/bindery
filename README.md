@@ -1,4 +1,6 @@
-# Bindery
+# The Bindery
+
+https://thebindery.org
 
 Design a book, print it in folding order, and get the templates to sew and
 case it by hand.

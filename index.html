@@ -4,8 +4,8 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-a2QKPLvOBSvXkaTrJqwsiYy2eG0WxchRrfeyjSkp29w='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
-<title>Bindery</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yt7PeTK2srFP6GDNHzAOd2+RVzoumfNXCi+Knp5JV1E='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>The Bindery</title>
 
 <style>
 /* ===================================================== typefaces ====
@@ -633,10 +633,16 @@ button, input, select { font: inherit; color: inherit; }
   color: inherit; background: none; border: 0; padding: 0; margin: 0;
   cursor: pointer; display: inline-block;
 }
-.wordmark button:hover span { color: var(--tag-accent); }
+.wordmark button:hover .ery { color: var(--tag-accent); }
 .wordmark button:focus-visible { outline: 2px solid var(--tag-accent); outline-offset: 5px; border-radius: 3px; }
-.wordmark span { color: var(--band-accent); transition: color .15s ease; }
-@media (prefers-reduced-motion: reduce) { .wordmark span { transition: none; } }
+.wordmark .ery { color: var(--band-accent); transition: color .15s ease; }
+/* "The" belongs to the name but not to its weight, so it sits smaller and
+   quieter and lets Bindery still read as the word. */
+.wordmark i {
+  font-style: normal; font-size: .52em; font-weight: 500;
+  color: var(--band-ink-2); margin-right: .12em; vertical-align: .34em;
+}
+@media (prefers-reduced-motion: reduce) { .wordmark .ery { transition: none; } }
 /* Both lines are the display face, so the header is one voice: the statement in
    the crisp cut, the aside in the soft one. Archivo in between belonged to
    neither the wordmark above it nor the line below. */
@@ -1329,7 +1335,7 @@ footer a:hover { color: var(--peacock-2); }
 <header class="masthead">
   <div>
     <h1 class="wordmark"><button type="button" data-act="wizhome"
-        aria-label="Bindery, back to the start">Bind<span>ery</span></button></h1>
+        aria-label="The Bindery, back to the start"><i>The</i> Bind<span class="ery">ery</span></button></h1>
     <p class="tagline">Customize and build the perfect <span class="sr-only">journal</span><span
         class="rot" aria-hidden="true"><span class="rot-in"><b>journal</b><b>planner</b><b>book</b><b>journal</b></span></span><span
         class="tag2">just the way you like it.</span></p>
@@ -2600,7 +2606,7 @@ function docCase(D) {
       </div>
       ${D.measured ? "" : `<div class="redbox"><b>Measure before you cut.</b> The spine is an estimate from
         ${fmtFine(D.caliper)} ${uLabel()} paper × ${D.leaves} leaves plus nominal sewing swell. Sew the block,
-        nip it, measure the spine, and enter it back in Bindery before cutting any board.</div>`}
+        nip it, measure the spine, and enter it back in The Bindery before cutting any board.</div>`}
       <h2>Measurements</h2><table>${rows}</table>
     </div></div></div>`;
 
@@ -2636,7 +2642,7 @@ function testSheet(kind, n, note, W, H, rot) {
     <div class="tfold" style="left:${W / 2}mm"></div>
     <div class="tbig"><b>${kind} ${n}</b><span>${note}</span></div>
     <div class="tcorner"></div>
-    <div class="tfoot">Bindery duplex test &middot; ${kind.toLowerCase()} pass &middot; sheet ${n} of 2</div>
+    <div class="tfoot">The Bindery duplex test &middot; ${kind.toLowerCase()} pass &middot; sheet ${n} of 2</div>
   </div></div>`;
 }
 const docTestFronts = D => [1, 2].map(n => testSheet("FRONT", n,
@@ -2696,7 +2702,7 @@ function docGuide(D) {
           Turn it over and try again.</li>
       <li>Turn over the sheet that says FRONT 1. If the other side says <b>BACK 2</b>,
           your printer feeds from the opposite end of the pile, so tick
-          <i>The other side says BACK 2, not BACK 1</i> in Bindery and print the test again.</li>
+          <i>The other side says BACK 2, not BACK 1</i> in The Bindery and print the test again.</li>
       <li>If it says BACK 1 but the black bars are on opposite edges, it is upside down, so
           tick <i>BACK 1 is there, but upside down</i> and print the test again.</li>
       <li>When BACK 1 sits on FRONT 1 with both bars along the same edge, print
@@ -2929,7 +2935,7 @@ function docGuide(D) {
     <h2><span>10</span>Measure the spine</h2>
     <div class="box"><b>Do this before cutting any board.</b>
       Measure the sewn, nipped, glued and lined block at the spine with a ruler, at the head,
-      the middle and the tail, taking the largest. Then put that number into Bindery and print
+      the middle and the tail, taking the largest. Then put that number into The Bindery and print
       the case template again. ${D.measured
         ? `You have entered ${fmt(D.spine)} ${uLabel()}, so the case sizes below are
            built on a real measurement.`
@@ -2941,7 +2947,7 @@ function docGuide(D) {
     <p>${D.measured
       ? `Cut to these, they are built on the ${fmt(D.spine)} ${uLabel()} you measured.`
       : `<b>These are provisional.</b> They assume a ${fmt(D.spine)} ${uLabel()} spine, which is
-         still an estimate. Measure the block first, put the real number into Bindery, then print
+         still an estimate. Measure the block first, put the real number into The Bindery, then print
          the case template and this page again before cutting.`}</p>
     <table><thead><tr><th>Piece</th><th>Size</th><th>Cut</th></tr></thead><tbody>
       <tr><td>Binder's board</td><td>${dim2(D.boardW, D.boardH)}</td><td>2</td></tr>
@@ -2963,7 +2969,7 @@ function docGuide(D) {
     </ul>
     <p style="color:#6B6B72;font-size:7.5pt;margin-top:5mm">Square, joint gap, hinge
        allowance, turn-in and mitre clearance are conventions rather than rules. They
-       are all adjustable in Bindery if your own practice differs.</p>
+       are all adjustable in The Bindery if your own practice differs.</p>
 
     <h2><span>12</span>Words</h2>
     <dl class="gloss">${Object.values(GLOSSARY)
@@ -3148,8 +3154,8 @@ function renderLanding(rail) {
   saveWiz();
   rail.innerHTML = `
   <div class="wiz land">
-    <h2 class="wiz-q" id="wiz-q" tabindex="-1">Welcome to Bindery</h2>
-    <p class="wiz-lead">Bindery helps you make a journal you actually want, by hand and from
+    <h2 class="wiz-q" id="wiz-q" tabindex="-1">Welcome to The Bindery</h2>
+    <p class="wiz-lead">The Bindery helps you make a journal you actually want, by hand and from
       scratch! Generate printable files for your journal pages customized to your exact
       preferences with step-by-step instructions to build a book by hand: the pages laid out
       in folding order, a punching template for sewing, and a case template drawn to your own
@@ -3237,7 +3243,7 @@ const STEPS = [
           <button class="linky" data-act="txtclear">Remove it</button></div>`;
       })() : hint("Nothing loaded yet, so the book is empty.")}
     ${TEXT.name ? chk("textPlain", "Read it as plain prose") : ""}
-    ${TEXT.name ? hint("Turn this on if the counts above look wrong. Bindery guesses at headings and at lists from the shape of the file, and a file it guesses badly about will read better with every paragraph treated the same. Check the count of headings against how many chapters you actually have.") : ""}
+    ${TEXT.name ? hint("Turn this on if the counts above look wrong. The Bindery guesses at headings and at lists from the shape of the file, and a file it guesses badly about will read better with every paragraph treated the same. Check the count of headings against how many chapters you actually have.") : ""}
     ${field("Typeface", `<div class="seg" data-seg="textFont">
       <button data-v="serif" aria-pressed="${S.textFont === "serif"}">Book serif</button>
       <button data-v="legible" aria-pressed="${S.textFont === "legible"}">Easier to read</button></div>`,
@@ -3529,12 +3535,12 @@ ${chk("focus", "Focus area")}
 
   { t: "You made a book AND you let us help!",
     hideNext: true,
-    lead: "Congratulations! And thank you so much. We are humbled by your labor and are grateful that you trusted Bindery to guide you through making your very own planner completely from scratch.",
+    lead: "Congratulations! And thank you so much. We are humbled by your labor and are grateful that you trusted The Bindery to guide you through making your very own planner completely from scratch.",
     body: D => `
     ${hint("You designed it, printed it, folded and sewed every signature, and cased it in cloth by hand. How cool. Now what?")}
     ${hint("<b>Use it!</b> Write in it. Scribble in it. Doodle in it, highlight in it, live in it.")}
     ${hint("<b>Make another one.</b> A pocket-sized book for a bag, a wide one for a desk, a single month as a gift, or the same book again next season with the trackers you realized you wished you had this time. Now that you know the flow, the next one takes minutes to set up and construction gets easier with each iteration.")}
-    ${hint("<b>Pass it along.</b> Bindery runs entirely in your browser and costs nothing, so sharing it is just sharing a link. Somebody you know keeps a paper planner and grumbles that none of them are quite right.")}
+    ${hint("<b>Pass it along.</b> The Bindery runs entirely in your browser and costs nothing, so sharing it is just sharing a link. Somebody you know keeps a paper planner and grumbles that none of them are quite right.")}
     ${hint("<b>Show it off.</b> Photograph the cover, the spine, the first page you write on. A hand-bound book photographs beautifully, and yours is the only one exactly like it.")}
     <button class="btn primary big" data-act="wizfirst">Make another book</button>` },
 ];
