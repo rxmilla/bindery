@@ -3,7 +3,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9CaIkve6vGAOT3wmVjaJP/WQS9L9qkLbpElB/EaBp/c='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-LBHzEl7EHPiCfbHHELmoB/iSKRebqEy+C0Z/4IA7UX0='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>Bindery</title>
 
 <style>
@@ -2545,7 +2545,7 @@ function docCase(D) {
       </div>
       ${nx * ny > 1 ? `<div class="tilehow" style="position:absolute;left:${pad}mm;top:${pad + hdr + 1.5}mm;width:${pw}mm">
         <b>Joining the tiles.</b> Print every tile at 100% scale and check the bar above
-        measures ${RULER_LABEL()}. Lay this tile over its neighbour so the pale grey crosses on
+        measures ${RULER_LABEL()}. Lay this tile over its neighbor so the pale gray crosses on
         the overlapping strip sit exactly on top of each other, one cross on one cross. Tape
         the seam on the back. Cut nothing until all ${nx * ny} tiles are joined.
       </div>` : ""}
