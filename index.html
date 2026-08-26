@@ -3,7 +3,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-MNKOEMeisWLeWr7DP2bB883ZFArgCuu7e6+8YOf7v70='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9CaIkve6vGAOT3wmVjaJP/WQS9L9qkLbpElB/EaBp/c='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>Bindery</title>
 
 <style>
@@ -1270,6 +1270,10 @@ footer a:hover { color: var(--peacock-2); }
 /* Everything printed sets its own face, but this makes sure of it: nothing
    inside the print root may inherit the interface font. The book is the
    product and its typography is chosen per style, not by the app chrome. */
+.proofnote { display: flex; align-items: center; justify-content: center; }
+.pn { font-family: Archivo, Arial, sans-serif; font-size: 11pt; line-height: 1.55;
+  color: #16161A; max-width: 118mm; border: .4mm solid #9A9AA1; border-radius: 2mm;
+  padding: 8mm 9mm; background: #fff; }
 #printroot { display: none; font-family: Archivo, "Helvetica Neue", Arial, sans-serif; font-weight: 400; }
 .flat { font-family: Archivo, "Helvetica Neue", Arial, sans-serif; font-weight: 400; }
 @media print {
@@ -1338,7 +1342,7 @@ const PAPERS = {
 const CALIPER = { 75: 0.10, 90: 0.12, 105: 0.135, 120: 0.15, 160: 0.20 };
 
 /* Margins nobody should have to guess at. Ordinary book proportions, taken from
-   the page rather than fixed in millimetres, so folding A3 does not leave the
+   the page rather than fixed in millimeters, so folding A3 does not leave the
    same 11 mm head margin that suits a page half the size. The spine margin is
    the wide one: it loses width to the sewing and to the curve of an open book. */
 const round5 = v => Math.round(v * 2) / 2;
@@ -1576,33 +1580,33 @@ const fillEl = () => `<div class="${
    The bill columns are 13mm, 22mm and 5mm wide, so "due" and "paid" are kept
    to abbreviations on purpose. */
 const PAGE_TEXT = {
-  en: { todo: "To do", tracker: "Personal tracker", goals: "Goals", notable: "Notable dates",
+  en: { weekOf: "Week of", todo: "To do", tracker: "Personal tracker", goals: "Goals", notable: "Notable dates",
         billTotals: "Bill totals", bill: "Bill", due: "Due", amount: "Amount", paid: "Pd", total: "Total" },
-  es: { todo: "Tareas", tracker: "Seguimiento personal", goals: "Objetivos", notable: "Fechas destacadas",
+  es: { weekOf: "Semana del", todo: "Tareas", tracker: "Seguimiento personal", goals: "Objetivos", notable: "Fechas destacadas",
         billTotals: "Total de facturas", bill: "Factura", due: "Vence", amount: "Importe", paid: "Pg", total: "Total" },
-  fr: { todo: "\u00c0 faire", tracker: "Suivi personnel", goals: "Objectifs", notable: "Dates \u00e0 noter",
+  fr: { weekOf: "Semaine du", todo: "\u00c0 faire", tracker: "Suivi personnel", goals: "Objectifs", notable: "Dates \u00e0 noter",
         billTotals: "Total des factures", bill: "Facture", due: "\u00c9ch.", amount: "Montant", paid: "P", total: "Total" },
-  de: { todo: "Aufgaben", tracker: "Pers\u00f6nliches Tracking", goals: "Ziele", notable: "Wichtige Termine",
+  de: { weekOf: "Woche vom", todo: "Aufgaben", tracker: "Pers\u00f6nliches Tracking", goals: "Ziele", notable: "Wichtige Termine",
         billTotals: "Rechnungssumme", bill: "Rechnung", due: "F\u00e4llig", amount: "Betrag", paid: "Bz", total: "Gesamt" },
-  pt: { todo: "Tarefas", tracker: "Acompanhamento pessoal", goals: "Objetivos", notable: "Datas importantes",
+  pt: { weekOf: "Semana de", todo: "Tarefas", tracker: "Acompanhamento pessoal", goals: "Objetivos", notable: "Datas importantes",
         billTotals: "Total de contas", bill: "Conta", due: "Vence", amount: "Valor", paid: "Pg", total: "Total" },
-  it: { todo: "Da fare", tracker: "Monitoraggio personale", goals: "Obiettivi", notable: "Date importanti",
+  it: { weekOf: "Settimana del", todo: "Da fare", tracker: "Monitoraggio personale", goals: "Obiettivi", notable: "Date importanti",
         billTotals: "Totale bollette", bill: "Bolletta", due: "Scad.", amount: "Importo", paid: "Pg", total: "Totale" },
-  nl: { todo: "Te doen", tracker: "Persoonlijke tracker", goals: "Doelen", notable: "Belangrijke data",
+  nl: { weekOf: "Week van", todo: "Te doen", tracker: "Persoonlijke tracker", goals: "Doelen", notable: "Belangrijke data",
         billTotals: "Totaal rekeningen", bill: "Rekening", due: "Verv.", amount: "Bedrag", paid: "Bt", total: "Totaal" },
-  pl: { todo: "Do zrobienia", tracker: "\u015aledzenie osobiste", goals: "Cele", notable: "Wa\u017cne daty",
+  pl: { weekOf: "Tydzień", todo: "Do zrobienia", tracker: "\u015aledzenie osobiste", goals: "Cele", notable: "Wa\u017cne daty",
         billTotals: "Suma rachunk\u00f3w", bill: "Rachunek", due: "Termin", amount: "Kwota", paid: "Zp", total: "Razem" },
-  cs: { todo: "\u00dakoly", tracker: "Osobn\u00ed sledov\u00e1n\u00ed", goals: "C\u00edle", notable: "D\u016fle\u017eit\u00e1 data",
+  cs: { weekOf: "Týden", todo: "\u00dakoly", tracker: "Osobn\u00ed sledov\u00e1n\u00ed", goals: "C\u00edle", notable: "D\u016fle\u017eit\u00e1 data",
         billTotals: "Celkem \u00fa\u010dty", bill: "\u00da\u010det", due: "Splat.", amount: "\u010c\u00e1stka", paid: "Zp", total: "Celkem" },
-  tr: { todo: "Yap\u0131lacaklar", tracker: "Ki\u015fisel takip", goals: "Hedefler", notable: "\u00d6nemli tarihler",
+  tr: { weekOf: "Hafta", todo: "Yap\u0131lacaklar", tracker: "Ki\u015fisel takip", goals: "Hedefler", notable: "\u00d6nemli tarihler",
         billTotals: "Fatura toplam\u0131", bill: "Fatura", due: "Vade", amount: "Tutar", paid: "\u00d6d", total: "Toplam" },
-  sv: { todo: "Att g\u00f6ra", tracker: "Personlig uppf\u00f6ljning", goals: "M\u00e5l", notable: "Viktiga datum",
+  sv: { weekOf: "Vecka", todo: "Att g\u00f6ra", tracker: "Personlig uppf\u00f6ljning", goals: "M\u00e5l", notable: "Viktiga datum",
         billTotals: "R\u00e4kningar totalt", bill: "R\u00e4kning", due: "F\u00f6rfall", amount: "Belopp", paid: "Bt", total: "Totalt" },
-  da: { todo: "Opgaver", tracker: "Personlig opf\u00f8lgning", goals: "M\u00e5l", notable: "Vigtige datoer",
+  da: { weekOf: "Uge", todo: "Opgaver", tracker: "Personlig opf\u00f8lgning", goals: "M\u00e5l", notable: "Vigtige datoer",
         billTotals: "Regninger i alt", bill: "Regning", due: "Forfald", amount: "Bel\u00f8b", paid: "Bt", total: "I alt" },
-  fi: { todo: "Teht\u00e4v\u00e4t", tracker: "Henkil\u00f6kohtainen seuranta", goals: "Tavoitteet", notable: "T\u00e4rke\u00e4t p\u00e4iv\u00e4t",
+  fi: { weekOf: "Viikko", todo: "Teht\u00e4v\u00e4t", tracker: "Henkil\u00f6kohtainen seuranta", goals: "Tavoitteet", notable: "T\u00e4rke\u00e4t p\u00e4iv\u00e4t",
         billTotals: "Laskut yhteens\u00e4", bill: "Lasku", due: "Er\u00e4pvm", amount: "Summa", paid: "Mk", total: "Yhteens\u00e4" },
-  vi: { todo: "Vi\u1ec7c c\u1ea7n l\u00e0m", tracker: "Theo d\u00f5i c\u00e1 nh\u00e2n", goals: "M\u1ee5c ti\u00eau", notable: "Ng\u00e0y quan tr\u1ecdng",
+  vi: { weekOf: "Tuần", todo: "Vi\u1ec7c c\u1ea7n l\u00e0m", tracker: "Theo d\u00f5i c\u00e1 nh\u00e2n", goals: "M\u1ee5c ti\u00eau", notable: "Ng\u00e0y quan tr\u1ecdng",
         billTotals: "T\u1ed5ng h\u00f3a \u0111\u01a1n", bill: "H\u00f3a \u0111\u01a1n", due: "H\u1ea1n", amount: "S\u1ed1 ti\u1ec1n", paid: "TT", total: "T\u1ed5ng" }
 };
 const PT = () => PAGE_TEXT[String(calLocale()).toLowerCase().split("-")[0]] || PAGE_TEXT.en;
@@ -2145,7 +2149,7 @@ const weekGoalsBlock = () => S.weekGoals
     }</div>` : "";
 
 const weekHdr = mon => `<div class="pg-hdr">
-      <div class="pg-title">Week of ${esc(weekSpan(mon))}</div>
+      <div class="pg-title">${esc(PT().weekOf)} ${esc(weekSpan(mon))}</div>
       <div class="pg-sub">${mon.getUTCFullYear()}</div>
     </div>`;
 
@@ -2349,8 +2353,20 @@ function pageEl(body, n, side, W, H) {
 
 function docProof(D) {
   const [W, H] = D.P.page;
-  return D.pages.map((b, i) =>
-    `<div class="pagebreak">${pageEl(b, i + 1, (i + 1) % 2 ? "recto" : "verso", W, H)}</div>`).join("");
+  const ruling = S.fill === "lines" ? "ruled lines" : S.fill === "blank" ? "blank space" : "a dot grid";
+  const note = S.fill === "blank"
+    ? `<b>This is a proof, for reading on screen.</b> You chose blank note space, so the
+       open areas below are genuinely empty. Every page is shown in reading order, one per
+       sheet, which is not how the book prints: use <b>${sheetsName()}</b> for that.`
+    : `<b>This is a proof, for reading on screen.</b> The open areas are set with
+       <b>${ruling}</b>, but a ${S.fill === "lines" ? "rule" : "dot"} is a fraction of a
+       millimeter and often will not survive being shrunk to fit a screen or a page. If the
+       spaces below look empty, they are not, and the printed book will carry them. Zoom in
+       to see them. Every page is shown in reading order, one per sheet, which is not how the
+       book prints: use <b>${sheetsName()}</b> for that.`;
+  return `<div class="pagebreak proofnote"><div class="pn">${note}</div></div>`
+    + D.pages.map((b, i) =>
+        `<div class="pagebreak">${pageEl(b, i + 1, (i + 1) % 2 ? "recto" : "verso", W, H)}</div>`).join("");
 }
 
 function sheetEl(D, s, rot) {
