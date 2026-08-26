@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Bindery talks to nothing except the font service, so it says so outright.
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
@@ -678,11 +679,38 @@ button, input, select { font: inherit; color: inherit; }
 
 .wrap {
   display: grid;
-  grid-template-columns: minmax(300px, 370px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 370px) minmax(0, 1fr);
   gap: 0;
   align-items: start;
 }
-@media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .wrap { grid-template-columns: minmax(0, 1fr); } }
+
+/* Phones. The rail becomes the page, the preview sits below it, and everything
+   is sized for reading at arm's length rather than shrunk to fit. */
+@media (max-width: 640px) {
+  .masthead { padding: 20px 18px 18px; }
+  .wordmark { font-size: 30px; }
+  .tagline { font-size: 17px; }
+  .tagline .tag2 { font-size: 15.5px; }
+  .main { padding: 18px 16px 32px; gap: 20px; }
+  .group .body, .wiz { padding-left: 16px; padding-right: 16px; }
+  .wiz-q { font-size: 19px; }
+  .wb { padding: 20px 0 4px; }
+  .wb-art { max-width: 200px; margin-bottom: 18px; }
+  .wb-grid { grid-template-columns: 1fr; gap: 16px; }
+  .outs { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .row2, .row3 { grid-template-columns: 1fr; }
+  .seg3 { flex-direction: column; }
+  .seg3 button { border-bottom: 1px solid var(--line-2); }
+  .seg3 button:last-child { border-bottom: 0; }
+  .pvhead { gap: 8px; }
+  .pvtabs { margin-left: 0; width: 100%; }
+  /* A finished page is 140mm wide, which will not fit. Let the spread scroll
+     inside its own box rather than pushing the whole page sideways. */
+  .stage { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .spread { justify-content: flex-start; padding-bottom: 6px; }
+}
 
 /* ================================================================ rail === */
 .rail {
