@@ -1,28 +1,38 @@
 # Bindery
 
-Design a journal, print it in folding order, and get the templates to sew and
+Design a book, print it in folding order, and get the templates to sew and
 case it by hand.
 
-One self-contained HTML file. No build step, no dependencies, no server, no
-account. Everything happens in the visitor's browser — the page layout, the
-imposition, reading a calendar file, and generating the printable documents.
+`index.html` is the entire site. No build step, no dependencies, no server,
+no database, no account. The page layout, the imposition, reading a calendar
+file, and generating every printable document all happen in the visitor's
+browser. Nothing is uploaded.
 
-## Running it
+## Deploying
 
-Open `index.html` in a browser. That is the whole thing.
+Any static host works, because there is nothing to run.
 
-## Hosting it
+- **Build command:** none
+- **Publish directory:** the repository root
+- **Node version:** not required
 
-Any static host works, because there is nothing to run. Drag the folder onto
-Netlify Drop, or push this repository and turn on GitHub Pages.
+On Kinsta Static Site Hosting, connect this repository and leave the build
+command empty. On Netlify or Cloudflare Pages, the same. On GitHub Pages,
+enable Pages for the branch.
 
-## What it sends anywhere
+## Notes for whoever hosts it
 
-Nothing. The only outbound request is to Google Fonts for the typefaces. An
-imported calendar is read in the browser and never uploaded, and it is kept out
-of the shareable configuration code so passing your setup to someone else never
-passes on your calendar.
+The typefaces are embedded in the file, so it makes no request to any other
+host and works offline once loaded. That puts the page at about 1.8 MB, which
+compresses to roughly 1.3 MB in transit. Make sure the host serves it gzipped
+or with brotli; every static host above does by default.
+
+The page carries its own Content Security Policy in a meta tag, including a
+hash of its inline script. **If you edit the JavaScript, that hash has to be
+recomputed or the browser will refuse to run the page and it will load blank.**
 
 ## Licence
 
-Not yet decided.
+Not yet decided. The embedded typefaces are all under the SIL Open Font
+License: Archivo, Fraunces, Outfit, Atkinson Hyperlegible, Libre Caslon Text,
+Libre Franklin, Bitter, Cabin, and IBM Plex Mono.
