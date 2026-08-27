@@ -4,7 +4,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yt7PeTK2srFP6GDNHzAOd2+RVzoumfNXCi+Knp5JV1E='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OCEPtq4Julle1wkIkSyHZC7m9vn3KPoBOBAoE1cvuAk='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -908,6 +908,16 @@ table.cut tr:last-child td { border-bottom: 0; }
 }
 .linky:hover { color: var(--ink); }
 .linky.danger { color: var(--dim); margin-left: auto; }
+/* What is loaded, stated plainly. A re-rendered file input always reads
+   "No file chosen", which made a successful import look like a failure. */
+.loaded {
+  border: 1px solid var(--peacock); border-left-width: 3px; border-radius: 5px;
+  background: var(--peacock-bg); padding: 11px 13px; font-size: 14.5px; color: var(--ink);
+}
+.loaded b { font-weight: 600; }
+.lnums { margin-top: 4px; font-size: 13.5px; color: var(--ink-2); line-height: 1.45; }
+.lwarn { margin-top: 7px; font-size: 13.5px; color: var(--dim); line-height: 1.45; }
+.lacts { display: flex; gap: 16px; margin-top: 9px; flex-wrap: wrap; }
 
 /* ============================================================ welcome === */
 .wb { padding: 30px 4px 8px; max-width: 760px; }
@@ -3237,15 +3247,18 @@ const STEPS = [
         : notebook()
           ? "Nothing dated anywhere in the book. Choose the planner to add day, week or month pages."
           : "Day, week and month pages, with whatever you decide to track on them.")}
-    ${field("Text file",
+    ${(!TEXT.name || PICK.txt) ? field("Text file",
       `<input type="file" id="txtfile" accept=".txt,.md,.markdown,text/plain">`,
-      "A plain text file. Blank lines separate paragraphs. A short line on its own in capitals, or one starting Chapter, is set as a heading, and a markdown heading written with # is always honored. Lines that were lined up in columns, like a table of contents, keep their layout. Nothing is uploaded.")}
+      "A plain text file. Blank lines separate paragraphs. A short line on its own in capitals, or one starting Chapter, is set as a heading, and a markdown heading written with # is always honored. Lines that were lined up in columns, like a table of contents, keep their layout. Nothing is uploaded.") : ""}
     ${TEXT.name ? (() => {
         const h = TEXT.paras.filter(x => x.h).length, l = TEXT.paras.filter(x => x.list).length;
-        return `<div class="note"><b>${esc(TEXT.name)}</b>: ${TEXT.paras.length} paragraphs, ${
-          h} heading${h === 1 ? "" : "s"}, ${l} list line${l === 1 ? "" : "s"}. ${
-          D.pages.length} pages on ${D.sheets} sheets.
-          <button class="linky" data-act="txtclear">Remove it</button></div>`;
+        return `<div class="loaded"><b>${esc(TEXT.name)}</b> is loaded.
+          <div class="lnums">${TEXT.paras.length} paragraphs &middot; ${h} heading${h === 1 ? "" : "s"}
+            &middot; ${l} list line${l === 1 ? "" : "s"} &middot; ${D.pages.length} pages on ${D.sheets} sheets</div>
+          <div class="lacts">
+            <button class="linky" data-act="txtswap">Choose a different file</button>
+            <button class="linky" data-act="txtclear">Remove it</button>
+          </div></div>`;
       })() : hint("Nothing loaded yet, so the book is empty.")}
     ${TEXT.name ? chk("textPlain", "Read it as plain prose") : ""}
     ${TEXT.name ? hint("Turn this on if the counts above look wrong. The Bindery guesses at headings and at lists from the shape of the file, and a file it guesses badly about will read better with every paragraph treated the same. Check the count of headings against how many chapters you actually have.") : ""}
@@ -3336,11 +3349,19 @@ const STEPS = [
     lead: "This is optional. Export a calendar (from Google or Apple, for example) and drop the file in here. Your events will be populated into the book.",
     tag: D => ICS.events.length ? `<span class="hint">${ICS.count} dated</span>` : "",
     body: D => `
-    ${field("Calendar file",
+    ${(!ICS.name || PICK.ics) ? field("Calendar file",
       `<input type="file" id="icsfile" accept=".ics,text/calendar">`,
-      "In Google Calendar: Settings, then Import and export, then Export. That downloads a zip. Unzip it and use one of the .ics files inside, one per calendar. In Apple Calendar: File, then Export. The file is read here on your own machine so nothing is uploaded. It is kept out of the configuration code, so sharing your setup never shares your calendar.")}
-    ${ICS.name ? `<div class="note"><b>${esc(ICS.name)}</b>: ${ICS.events.length} entries read, ${ICS.count} printed into these ${D.days} days.
-        <button class="linky" data-act="icsclear">Remove it</button></div>` : ""}
+      "In Google Calendar: Settings, then Import and export, then Export. That downloads a zip. Unzip it and use one of the .ics files inside, one per calendar. In Apple Calendar: File, then Export. The file is read here on your own machine so nothing is uploaded. It is kept out of the configuration code, so sharing your setup never shares your calendar.") : ""}
+    ${ICS.name ? `<div class="loaded">
+        <b>${esc(ICS.name)}</b> is loaded.
+        <div class="lnums">${ICS.events.length} entr${ICS.events.length === 1 ? "y" : "ies"} in the file
+          &middot; ${ICS.count} printed into these ${D.days} days</div>
+        ${ICS.events.length && !ICS.count ? `<div class="lwarn">None of them fall inside your dates.
+          ${S.icsAllDayOnly ? "Either your book covers different months, or the file has no all-day events in them. Clearing the box below brings timed events in too." : "Your book covers different months from the events in this file."}</div>` : ""}
+        <div class="lacts">
+          <button class="linky" data-act="icsswap">Choose a different file</button>
+          <button class="linky" data-act="icsclear">Remove it</button>
+        </div></div>` : ""}
     ${chk("icsAllDayOnly", "All-day events only")}
     ${hint("All-day entries are the ones worth binding into a book. Allowing timed events may cause issues with time zones.")}
     ${ICS.events.length ? chk("icsShow", "Print them in the book") : ""}` },
@@ -3556,6 +3577,8 @@ ${chk("focus", "Focus area")}
 const ALWAYS_WELCOME = true;
 
 let WIZ = { on: true, step: 0, armed: false, resumed: false, landing: true, chose: false };
+/* Show the picker again after a file is already loaded, so it can be swapped. */
+let PICK = { ics: false, txt: false };
 
 /* A notebook skips everything about days, weeks and months, so the numbering
    reflects the steps you will actually be asked. */
@@ -3804,6 +3827,7 @@ document.addEventListener("change", e => {
     const r = new FileReader();
     r.onload = () => {
       TEXT = { name: f.name, raw: String(r.result), paras: parseText(String(r.result)) };
+      PICK.txt = false;
       TEXT_PAGES = null;
       saveText();
       renderAll();
@@ -3818,6 +3842,7 @@ document.addEventListener("change", e => {
   r.onload = () => {
     try {
       ICS = { name: f.name, events: parseICS(String(r.result)), count: 0 };
+      PICK.ics = false;
       saveICS();
     } catch (err) { ICS = { name: "", events: [], count: 0 }; }
     renderAll();
@@ -3850,13 +3875,22 @@ document.addEventListener("click", e => {
   const act = e.target.dataset.act;
   /* Two presses to wipe everything. One stray click on a link that sits under
      every step would otherwise throw away the whole setup with no way back. */
+  if (act === "icsswap" || act === "txtswap") {
+    PICK[act === "icsswap" ? "ics" : "txt"] = true;
+    renderRail();
+    const inp = document.getElementById(act === "icsswap" ? "icsfile" : "txtfile");
+    if (inp) inp.focus();
+    return;
+  }
   if (act === "txtclear") {
+    PICK.txt = false;
     TEXT = { name: "", paras: [] }; TEXT_PAGES = null;
     try { localStorage.removeItem("bindery.text"); } catch (err) { /* nothing to do */ }
     renderAll();
     return;
   }
   if (act === "icsclear") {
+    PICK.ics = false;
     ICS = { name: "", events: [], count: 0 };
     try { localStorage.removeItem("bindery.ics"); } catch (err) { /* nothing to do */ }
     renderAll();
