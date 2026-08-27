@@ -4,7 +4,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-25gi8bAfnn1RSf7VK+R75bm31LtaYRLfOe797yNo4fU='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-HOyeCr96/HQgGoWwnvJtiKxlGa6bQ0T90wyJuifG1z4='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -2743,7 +2743,8 @@ function docGuide(D) {
       ${D.sigs} signatures of ${per} &middot; finished page ${dim2(D.P.page[0], D.P.page[1])}
       &middot; ${S.paperGsm} gsm</div>
 
-    <p class="howto"><b>How to use this.</b> Read steps 1 to 5 before you buy anything. Steps
+    <p class="howto"><b>How to use this.</b> A <b>signature</b> is a packet of ${per} sheets
+      folded together and sewn as one; this book has ${D.sigs} of them. Read steps 1 to 5 before you buy anything. Steps
       6 to 11 are bench work, each written to be read at the moment you do it. <b>Step 6 can be
       skipped if you have sewn a book before</b>, and step 11 cannot be undone, so read that
       one twice.</p>
@@ -2754,19 +2755,19 @@ function docGuide(D) {
        oversize and cut them down; the case template is printed at 1:1 to cut against.</p>
     <table><thead><tr><th>Material</th><th>How much</th><th>Notes</th></tr></thead><tbody>
       <tr><td>${D.P.name} paper, ${S.paperGsm} gsm</td><td>${D.sheets} sheets</td>
-        <td>Plus ${spareSheets} spare. Grain head to tail.</td></tr>
+        <td>Plus ${spareSheets} spare. Grain, the direction the fibers run, should go head to tail.</td></tr>
       <tr><td>Endpaper stock</td><td>2 sheets at ${dim2(D.P.sheet[0], D.P.sheet[1])}</td>
-        <td>Folds once to page size. Heavier or colored stock is usual.</td></tr>
+        <td>An endpaper is a folded sheet glued between the block and the board at each end. Folds once to page size. Heavier or colored stock is usual.</td></tr>
       <tr><td>Waxed linen thread</td><td>${thread}</td>
         <td>Work in two-meter lengths.</td></tr>
       <tr><td>Binder's board</td><td>2 pieces at ${dim2(D.boardW, D.boardH)}</td>
         <td>${fmt(S.boardT)} ${u} thick. Grain head to tail.</td></tr>
       <tr><td>Spine strip, card</td><td>1 at ${dim2(D.spineW, D.boardH)}</td>
-        <td>Thin card, not board. It has to bend.</td></tr>
+        <td>The strip spanning the spine between the two boards. Thin card, not board, because it has to bend.</td></tr>
       <tr><td>Book cloth</td><td>1 piece at ${dim2(D.clothW, D.clothH)}</td>
         <td>Buy at least ${dim2(D.clothW + 50, D.clothH + 50)}.</td></tr>
       <tr><td>Mull or super</td><td>1 at ${dim2(mullW, mullH)}</td>
-        <td>Open-weave cotton. This is what holds the block in.</td></tr>
+        <td>Open-weave cotton, called mull or super. Glued across the spine and onto the endpapers, it is what holds the block into the cover.</td></tr>
       <tr><td>Kraft paper lining</td><td>1 at ${dim2(D.spine, mullH)}</td>
         <td>Goes over the mull, on the spine only.</td></tr>
       <tr><td>Bookbinder's PVA</td><td>about ${glueML} ml</td>
@@ -2796,7 +2797,7 @@ function docGuide(D) {
        halves together and get the ticks to meet <i>before</i> you crease anything, then hold
        them there and run a bone folder from the center of the fold outward to each end.</p>
     <p>Accuracy compounds. A sheet folded a millimeter off puts its edge a millimeter out at
-       the fore edge, and forty of those is a visibly ragged book. Keep the pile in order as
+       the <b>fore edge</b>, the open side opposite the spine, and forty of those is a visibly ragged book. Keep the pile in order as
        you go; the sheets are not interchangeable.</p>
     <div class="box"><b>Score before you fold if the grain runs the wrong way.</b>
       Tear a spare sheet both ways. The direction that tears straight and clean is the
@@ -2805,7 +2806,7 @@ function docGuide(D) {
       cross-grain paper cracks.</div>
 
     <h2><span>4</span>Gather and check</h2>
-    <p>Take ${per} sheets at a time off the top. Gathered in order, the dash on each
+    <p>Take ${per} sheets at a time off the top. Each nested set of ${per} is a <b>signature</b>, the unit that gets sewn as one. Gathered in order, the dash on each
        signature's spine fold steps down the spine.${D.sigs > 12 ? " The steps restart after twelve, so you get more than one run." : ""}</p>
     <p><b>Then check the fold before you sew.</b> Open the innermost sheet of each
        signature. ${S.folios
@@ -2835,7 +2836,8 @@ function docGuide(D) {
       : ""}
 
     <h2><span>5</span>Pierce the sewing stations</h2>
-    <p>Print the <b>Sewing template</b>, cut out a strip and fold it down its center line.
+    <p>The <b>stations</b> are the holes the thread passes through, spaced down the fold.
+       Print the <b>Sewing template</b>, cut out a strip and fold it down its center line.
        Lay the folded edge in the gutter of an opened signature, HEAD to the head, and pierce
        the ${S.stations} dots with an awl into a cradle or something soft. The same strip does
        all ${D.sigs} signatures.</p>
@@ -2854,8 +2856,8 @@ function docGuide(D) {
     <p><b>The second signature.</b> Lay it on top, heads level. Go in at station
        ${S.stations} and sew back the other way, finishing outside at station 1. You are now
        beside the tail you left at the start. Tie the two ends together with a square knot,
-       snug but not strangled. Two signatures do not need a kettle stitch yet, because there
-       is nothing beneath them to catch.</p>
+       snug but not strangled. Two signatures do not need a <b>kettle stitch</b>, the knot that links one signature to the
+       one below, because there is nothing beneath them to catch yet.</p>
     <div class="box"><b>The kettle stitch, from the third signature onward.</b>
       This is the whole trick, and it is one movement repeated. Your thread is outside, at the
       end station, and the next signature is not on yet.
@@ -2937,7 +2939,8 @@ function docGuide(D) {
         ? `You have entered ${fmt(D.spine)} ${uLabel()}, so the case sizes below are
            built on a real measurement.`
         : `The case sizes below assume ${fmt(D.spine)} ${uLabel()}, which is an estimate
-           from the paper thickness. Sewing swell varies a lot with thread and tension
+           from the paper thickness alone. Sewing adds <b>swell</b>, the extra thickness the
+           thread itself builds up at the spine, and it varies a lot with thread and tension
            and can move it by several ${uLabel()}.`}</div>
 
     <h2><span>11</span>Case</h2>
@@ -3002,9 +3005,6 @@ function docGuide(D) {
        allowance, turn-in and mitre clearance are conventions rather than rules. They
        are all adjustable in The Bindery if your own practice differs.</p>
 
-    <h2><span>12</span>Words</h2>
-    <dl class="gloss">${Object.values(GLOSSARY)
-      .map(([term, def]) => `<dt>${esc(term)}</dt><dd>${esc(def)}</dd>`).join("")}</dl>
   </div>`;
 }
 
