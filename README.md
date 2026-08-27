@@ -25,7 +25,7 @@ enable Pages for the branch.
 ## Notes for whoever hosts it
 
 The typefaces are embedded in the file, so it makes no request to any other
-host and works offline once loaded. That puts the page at about 1.8 MB, which
+host, and makes no request of any kind once loaded. That puts the page at about 1.8 MB, which
 compresses to roughly 1.3 MB in transit. Make sure the host serves it gzipped
 or with brotli; every static host above does by default.
 
