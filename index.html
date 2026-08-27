@@ -631,6 +631,9 @@ button, input, select { font: inherit; color: inherit; }
 .wordmark button {
   font: inherit; font-variation-settings: inherit; letter-spacing: inherit;
   color: inherit; background: none; border: 0; padding: 0; margin: 0;
+  /* A button centres its text by default, which pushed "The" into the middle
+     of the wordmark instead of leaving it flush with the B. */
+  text-align: left;
   cursor: pointer; display: inline-block;
 }
 .wordmark button:hover .ery { color: var(--tag-accent); }
