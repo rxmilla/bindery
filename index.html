@@ -636,11 +636,13 @@ button, input, select { font: inherit; color: inherit; }
 .wordmark button:hover .ery { color: var(--tag-accent); }
 .wordmark button:focus-visible { outline: 2px solid var(--tag-accent); outline-offset: 5px; border-radius: 3px; }
 .wordmark .ery { color: var(--band-accent); transition: color .15s ease; }
-/* "The" belongs to the name but not to its weight, so it sits smaller and
-   quieter and lets Bindery still read as the word. */
+/* "The" is part of the name but not its weight, so it sits above as a small
+   caps line rather than beside the word, where it floated awkwardly. */
 .wordmark i {
-  font-style: normal; font-size: .52em; font-weight: 500;
-  color: var(--band-ink-2); margin-right: .12em; vertical-align: .34em;
+  font-style: normal; display: block;
+  font-size: .30em; font-weight: 600; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--band-ink-2);
+  margin-bottom: .3em;
 }
 @media (prefers-reduced-motion: reduce) { .wordmark .ery { transition: none; } }
 /* Both lines are the display face, so the header is one voice: the statement in
