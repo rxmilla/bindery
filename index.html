@@ -4,7 +4,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OCEPtq4Julle1wkIkSyHZC7m9vn3KPoBOBAoE1cvuAk='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-25gi8bAfnn1RSf7VK+R75bm31LtaYRLfOe797yNo4fU='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -1274,6 +1274,7 @@ footer a:hover { color: var(--peacock-2); }
 .guide { color: #16161A; font-family: Archivo, Arial, sans-serif;
          font-size: 9pt; line-height: 1.5; }
 .guide h1 { font-size: 17pt; letter-spacing: -0.01em; margin: 0; }
+.guide .howto { border-left: .6mm solid #9A9AA1; padding: 1mm 0 1mm 3mm; margin: 4mm 0 0; }
 .guide .lede { color: #55555C; font-size: 8.5pt; margin-top: 1.5mm;
                padding-bottom: 3mm; border-bottom: 0.5mm solid #16161A; }
 .guide h2 { font-size: 11pt; margin: 7mm 0 1.5mm; break-after: avoid; }
@@ -2742,46 +2743,46 @@ function docGuide(D) {
       ${D.sigs} signatures of ${per} &middot; finished page ${dim2(D.P.page[0], D.P.page[1])}
       &middot; ${S.paperGsm} gsm</div>
 
+    <p class="howto"><b>How to use this.</b> Read steps 1 to 5 before you buy anything. Steps
+      6 to 11 are bench work, each written to be read at the moment you do it. <b>Step 6 can be
+      skipped if you have sewn a book before</b>, and step 11 cannot be undone, so read that
+      one twice.</p>
+
     <h2><span>1</span>What you need</h2>
     <p>Sizes here are this book's own, worked out from the page size and the
        ${D.measured ? "spine you measured" : "spine estimated so far"}. Buy the board and cloth
        oversize and cut them down; the case template is printed at 1:1 to cut against.</p>
     <table><thead><tr><th>Material</th><th>How much</th><th>Notes</th></tr></thead><tbody>
       <tr><td>${D.P.name} paper, ${S.paperGsm} gsm</td><td>${D.sheets} sheets</td>
-        <td>Plus ${spareSheets} spare for folding tests and mistakes. Grain should run head to tail.</td></tr>
+        <td>Plus ${spareSheets} spare. Grain head to tail.</td></tr>
       <tr><td>Endpaper stock</td><td>2 sheets at ${dim2(D.P.sheet[0], D.P.sheet[1])}</td>
-        <td>Each folds once to ${dim2(D.P.page[0], D.P.page[1])}, the finished page size.
-            A heavier or colored paper is usual.</td></tr>
+        <td>Folds once to page size. Heavier or colored stock is usual.</td></tr>
       <tr><td>Waxed linen thread</td><td>${thread}</td>
-        <td>For ${D.sigs} signatures over ${S.stations} stations, with knots and waste. Work in two-meter lengths.</td></tr>
+        <td>Work in two-meter lengths.</td></tr>
       <tr><td>Binder's board</td><td>2 pieces at ${dim2(D.boardW, D.boardH)}</td>
-        <td>${fmt(S.boardT)} ${u} thick. Grain head to tail, parallel to the spine.</td></tr>
+        <td>${fmt(S.boardT)} ${u} thick. Grain head to tail.</td></tr>
       <tr><td>Spine strip, card</td><td>1 at ${dim2(D.spineW, D.boardH)}</td>
         <td>Thin card, not board. It has to bend.</td></tr>
       <tr><td>Book cloth</td><td>1 piece at ${dim2(D.clothW, D.clothH)}</td>
-        <td>Buy at least ${dim2(D.clothW + 50, D.clothH + 50)} so you have something to hold.</td></tr>
+        <td>Buy at least ${dim2(D.clothW + 50, D.clothH + 50)}.</td></tr>
       <tr><td>Mull or super</td><td>1 at ${dim2(mullW, mullH)}</td>
-        <td>Open-weave cotton. This is what holds the block into the case.</td></tr>
+        <td>Open-weave cotton. This is what holds the block in.</td></tr>
       <tr><td>Kraft paper lining</td><td>1 at ${dim2(D.spine, mullH)}</td>
         <td>Goes over the mull, on the spine only.</td></tr>
       <tr><td>Bookbinder's PVA</td><td>about ${glueML} ml</td>
         <td>Dries flexible. Not hot glue, superglue, or rigid wood glue.</td></tr>
     </tbody></table>
 
-    <p><b>Tools.</b> None of these need to be specialist except the awl and the needle.</p>
-    <table><thead><tr><th>Tool</th><th>What for</th></tr></thead><tbody>
-      <tr><td>Bone folder</td><td>Scoring and creasing folds, and rubbing cloth down</td></tr>
-      <tr><td>Awl</td><td>Piercing the sewing stations</td></tr>
-      <tr><td>Blunt bookbinder's needle</td><td>Sewing. Blunt, so it follows the hole rather than making new ones</td></tr>
-      <tr><td>Metal ruler, at least ${about(Math.ceil(D.clothW / 10) * 10)}</td><td>Measuring, and a straight edge to cut against</td></tr>
-      <tr><td>Sharp knife and spare blades</td><td>Cutting board and cloth. Board blunts a blade fast</td></tr>
-      <tr><td>Cutting mat</td><td>Under everything you cut</td></tr>
-      <tr><td>Glue brush, about ${about(25)} wide</td><td>Stiff bristle, for spine and cloth</td></tr>
+    <p><b>Tools.</b> Four worth a word:</p>
+    <table><thead><tr><th>Tool</th><th>Why</th></tr></thead><tbody>
+      <tr><td>Blunt bookbinder\'s needle</td><td>Blunt so it follows the hole instead of making new ones</td></tr>
+      <tr><td>Awl</td><td>For piercing the sewing stations</td></tr>
+      <tr><td>Bone folder</td><td>Creasing folds and rubbing cloth down without shining it</td></tr>
       <tr><td>Two rigid flat boards, bigger than ${dim2(D.P.page[0], D.P.page[1])}</td><td>Nipping and pressing. Cardboard flexes and will not do</td></tr>
-      <tr><td>Clamps, a strap, or heavy weights</td><td>Holding the nip while the glue sets</td></tr>
-      <tr><td>Scrap paper</td><td>Under the block when gluing, thrown away as it gets tacky</td></tr>
-      <tr><td>Scissors and a pencil</td><td>Thread, mull, and marking up</td></tr>
     </tbody></table>
+    <p>And from any drawer: a metal ruler at least ${about(Math.ceil(D.clothW / 10) * 10)} long,
+       a sharp knife with spare blades, a cutting mat, a stiff glue brush about ${about(25)}
+       wide, clamps or heavy weights, scrap paper, scissors, a pencil.</p>
 
     <h2><span>2</span>Print</h2>
     <p>Every file prints at <b>100% scale</b>. Fit to page and shrink to fit both move
@@ -2790,8 +2791,13 @@ function docGuide(D) {
 
     <h2><span>3</span>Fold</h2>
     ${turnOver}
-    <p>Fold each sheet down the middle, using the short ticks at the top and bottom
-       center edge. <b>The first-pass side goes on the outside of the fold.</b></p>
+    <p>Fold each sheet down the middle, lining up the short ticks at the top and bottom
+       center edge. <b>The first-pass side goes on the outside of the fold.</b> Bring the two
+       halves together and get the ticks to meet <i>before</i> you crease anything, then hold
+       them there and run a bone folder from the center of the fold outward to each end.</p>
+    <p>Accuracy compounds. A sheet folded a millimeter off puts its edge a millimeter out at
+       the fore edge, and forty of those is a visibly ragged book. Keep the pile in order as
+       you go; the sheets are not interchangeable.</p>
     <div class="box"><b>Score before you fold if the grain runs the wrong way.</b>
       Tear a spare sheet both ways. The direction that tears straight and clean is the
       grain, and it should run head to tail, parallel to the spine. If it runs across
@@ -2838,10 +2844,8 @@ function docGuide(D) {
        before piercing anything.</p>
 
     <h2><span>6</span>Sew, if you have not done this before</h2>
-    <p><b>What you need.</b> Waxed linen thread and a blunt bookbinder's needle. Work in
-       lengths of about two meters. Longer lengths tangle and fray. Lay signature 1 down first and
-       build the stack upward toward signature ${D.sigs}. Stations are numbered 1 at the head
-       through ${S.stations} at the tail.</p>
+    <p>Lay signature 1 down first and build upward toward signature ${D.sigs}. Stations are
+       numbered 1 at the head through ${S.stations} at the tail.</p>
     <p><b>The first signature.</b> Open it to the middle and lay it fold down. Push the needle
        through station 1 from the <b>outside in</b>, leaving about ${about(100)} of thread hanging
        outside. Then sew along the fold alternating: out at 2, in at 3, and so on, finishing
@@ -2869,73 +2873,51 @@ function docGuide(D) {
     <p><b>Then repeat.</b> Sew across, kettle at the far end, add the next signature. The
        direction reverses every time, so you work back and forth up the spine.</p>
     <p><b>Tension.</b> Pull each stitch <i>along</i> the fold, never sideways across it, which
-       tears the paper at the hole. Snug, not tight. Take the slack out of every stitch as you
-       go, because a loose one stays loose and the block will never sit square. A block
-       sewn too tight will not open flat and can split at the folds. Keep checking the heads
-       stay level.</p>
+       tears the paper at the hole. Take the slack out of every stitch as you go, because a
+       loose one stays loose, but stop short of tight: a block sewn hard will not open flat and
+       can split at the folds. Keep checking the heads stay level.</p>
     <p><b>Running out of thread.</b> With about ${about(150)} left, tie on a new length with a
        weaver's knot, sited <i>inside</i> a signature rather than out on the spine where it
        would sit under the glue as a lump.</p>
     <p><b>Finishing.</b> After the last station of the last signature, make one kettle stitch,
        then a second through the same link, and tie a double knot. Trim to about ${about(10)}.</p>
 
-    <h2><span>7</span>Nip the block, without a press</h2>
-    <p><b>What nipping is.</b> A short, hard squeeze across the whole block. Sewing leaves the
-       spine fatter than the rest, because thread has bulked out every fold, and there is air
-       between the sheets. Nipping closes that up and turns a springy stack into one solid
-       object. It differs from pressing only in duration: nipping is minutes under hard
-       pressure, pressing is hours under light pressure.</p>
-    <p><b>You do not need a press.</b> Two rigid flat boards slightly larger than the pages.
-       Plywood or MDF offcuts, a plastic chopping board, a baking sheet, or two pieces of
-       binder's board glued back to back. Cardboard flexes and will not do. Then squeeze, in
-       the order of what actually works:</p>
-    <ol>
-      <li><b>Stand on it.</b> Block between the boards on the floor, weight through the balls
-          of your feet directly over the spine, rocking gently for a minute and repeating.
-          Body weight over that small area beats any stack of books, and costs nothing.</li>
-      <li><b>Clamps.</b> Two or more F-clamps or C-clamps, tightened a little at a time from
-          the corners inward so the boards stay parallel.</li>
-      <li><b>A ratchet or cam strap</b> around the boards and block.</li>
-      <li><b>Dead weight.</b> Books, a cast iron pan, containers of water at roughly 1 kg per
-          liter. Least pressure, so leave it hours rather than minutes.</li>
-    </ol>
-    <p><b>Square it first.</b> Tap the heads level, then the spine, then set it between the
-       boards flush to one corner. A block nipped out of square stays out of square. To tell
-       it worked, pinch the spine: it should go from springy and noticeably fatter than the
-       fore edge to solid and visibly thinner.</p>
-    <div class="box"><b>What makes an improvised nip good enough.</b>
-      Whatever compression you manage springs back the moment you let go. So do not nip, walk
-      away and measure tomorrow, because that is a relaxed block. <b>Nip it, keep it held, and glue
-      the spine while it is still under pressure.</b> The glue fixes that thickness. If you
-      nipped by standing on it, get the block straight into clamps or under weight with the
-      spine standing proud, and glue it there.</div>
+    <h2><span>7</span>Nip the block</h2>
+    <p>Sewing leaves the spine fatter and springy. Nipping squeezes the air out and turns a
+       stack into one solid object. You need two rigid flat boards a little larger than the
+       pages: plywood or MDF offcuts, a chopping board, a baking sheet. Cardboard flexes and
+       will not do.</p>
+    <p><b>Square it, then squeeze it.</b> Tap the heads level, then the spine, and set the
+       block between the boards flush to one corner. Out of square now is out of square
+       forever. Then either <b>stand on it</b>, weight through the balls of your feet over the
+       spine, rocking for a minute and repeating, or <b>clamp it</b>, tightening a little at a
+       time from the corners inward so the boards stay parallel. A strap works too. Dead
+       weight works least well and needs hours rather than minutes.</p>
+    <p>It worked when the spine goes from springy and fatter than the fore edge to solid and
+       visibly thinner.</p>
+    <div class="box"><b>Glue the spine while it is still held.</b>
+      Compression springs back the moment you let go, so a block nipped yesterday is a
+      relaxed block. Keep it clamped or weighted, reposition it so the spine stands
+      ${about(5)} proud, and glue it there. The glue is what fixes the thickness.</div>
 
     <h2><span>8</span>Glue the spine</h2>
-    <p><b>Endpapers first.</b> An endpaper is one sheet folded in half. It joins the block
-       to the board and hides the raw edge of the cloth. Fold one, lay the folded edge against
-       the very first page so the fold sits at the spine, then run a line of glue about
-       ${about(3)} wide along that folded edge <i>only</i>, not across the face, and press it
-       down. One at the front, one at the back. The narrow line is the whole point: glue the
-       full face and the page cannot turn. Binders call this tipping on. Do this before the
-       glue and the mull go on, because the mull has to reach from the spine onto the
-       endpaper and from there onto the board.</p>
-    <p><b>What glue.</b> Bookbinder's PVA. It dries flexible, which matters because the spine
-       bends every time the book opens. Not hot glue, superglue, or rigid craft and wood glues.
-       They set hard and crack.</p>
-    <p><b>Set up</b> with the spine accessible: either still clamped between the boards but
-       repositioned so the spine stands about ${about(5)} proud, spine facing up, or laid on its side
-       with the spine just over the edge of the table and a weight on top, clear of the
-       spine.</p>
-    <p><b>Applying it.</b> A stiff bristle glue or paste brush, roughly ${about(25)} wide, lightly
-       loaded. Brush <b>across</b> the spine rather than lengthways, which pushes glue down
-       into the joints between signatures, which is where it needs to be. Then one light pass
-       along to even it out. Keep it thin: glue in the gaps, not a rubbery skin on top. If it
-       looks wet and glossy, wipe some away.</p>
-    <p><b>Coats and timing.</b> First coat, then about <b>15 minutes</b> until it is no longer
-       tacky. Second coat, another <b>15 to 25 minutes</b>. Two or three thin coats is right
-       for a spine around ${fmt(D.spine)} ${uLabel()}; more just adds stiffness. Check between
-       coats that the block is still square and the spine has not bowed. Wash the brush the
-       moment you finish. Dried PVA does not come out.</p>
+    <p><b>Endpapers first.</b> An endpaper is one sheet folded in half. It joins the block to
+       the board and hides the raw edge of the cloth. Lay the folded edge against the very
+       first page so the fold sits at the spine, run a line of glue about ${about(3)} wide
+       along that folded edge <i>only</i>, not across the face, and press it down. One at the
+       front, one at the back. Glue the full face and the page cannot turn. Binders call this
+       tipping on. It has to happen before the mull, which reaches from the spine across the
+       endpaper and onto the board.</p>
+    <p><b>Use bookbinder\'s PVA.</b> It stays flexible. Hot glue, superglue and wood glue all
+       set hard and crack the first time the book opens.</p>
+    <p><b>Brush across the spine, not along it.</b> A stiff bristle brush about ${about(25)}
+       wide, lightly loaded. Brushing across drives glue down into the joints between
+       signatures, which is where it has to be. Finish with one light pass along to even it
+       out. Keep it thin: glue in the gaps, not a skin on top. If it looks wet and glossy,
+       wipe some away.</p>
+    <p><b>Two or three thin coats.</b> About <b>15 minutes</b> between them, until the last is
+       no longer tacky. More coats only add stiffness. Check between coats that the spine has
+       not bowed. Wash the brush immediately, because dried PVA does not come out.</p>
 
     <h2><span>9</span>Line the spine</h2>
     <p>While the last coat is still <b>tacky rather than dry</b>, lay the mull on: centered,
@@ -2972,16 +2954,50 @@ function docGuide(D) {
       <tr><td>Mull / super</td><td>${dim2(mullW, mullH)}</td><td>1</td></tr>
       <tr><td>Kraft lining</td><td>${dim2(D.spine, mullH)}</td><td>1</td></tr>
     </tbody></table>
-    <ul>
-      <li>The endpapers, mull and lining are already on, from steps 8 and 9.</li>
-      <li>Tape the case template tiles together on the gray registration crosses and
-          cut the cloth to size.</li>
-      <li>Glue the boards and spine strip onto the cloth on their marked rectangles,
-          keeping the ${fmt(S.joint)} ${uLabel()} joint gaps clear.</li>
-      <li>Cut the four mitres, then turn in the head, tail and fore edge.</li>
-      <li>Case the block in, with the joints falling into the two gaps. Press overnight
-          under weight with boards in the joints.</li>
-    </ul>
+    <p>The endpapers, mull and lining are already on, from steps 8 and 9. What follows is the
+       only part of the build that cannot be undone, so read it through before you start.</p>
+
+    <p><b>Cut the boards.</b> Two boards and one card spine strip, to the sizes above. Cut
+       against a metal ruler with several light passes rather than one hard one; board fights
+       back and a slipped knife takes a chunk out of the edge. Check both boards are square by
+       measuring the diagonals, which should match. A board cut out of square shows on the
+       finished book at every edge.</p>
+
+    <p><b>Cut the cloth.</b> Tape the template tiles together on the gray registration crosses
+       and cut the cloth to ${dim2(D.clothW, D.clothH)}. Lay it face down.</p>
+
+    <p><b>Glue the boards onto the cloth.</b> Put glue on the <i>board</i>, never on the cloth.
+       Wet cloth stretches, and stretched cloth dries crooked. Lay each board onto its marked
+       rectangle, spine board first, and press from the middle outward to drive out air.
+       <b>Keep the two ${fmt(S.joint)} ${uLabel()} joint gaps clear of glue.</b> Those gaps are
+       the hinges. Glue in them and the cover will not open.</p>
+
+    <p><b>Mitre the corners.</b> Cut each corner off at 45 degrees, leaving about
+       ${about(S.boardT * 1.5)} of cloth beyond the board corner. Too close and the corner
+       shows through; too far and the turn-ins bunch into a lump you can feel through the
+       cloth.</p>
+
+    <p><b>Turn in.</b> Head and tail first, then the fore edge. Before turning the fore edge,
+       push the little tab of cloth at each corner in against the board with a bone folder, so
+       the corner is closed rather than open. Rub every turn-in down firmly.</p>
+
+    <div class="box"><b>Let the case dry flat under weight before you case in.</b>
+      Cloth shrinks as it dries and will bow both boards outward if nothing holds them. A few
+      hours between two flat boards with a weight on top. Skipping this is the most common
+      reason a hand-bound book will not sit closed.</div>
+
+    <p><b>Case the block in.</b> The moment itself. Open the case flat, face down. Brush glue
+       evenly over the outer face of the front endpaper, right to its edges. Lower the block
+       onto the case so that <b>the spine joint sits exactly in the joint gap</b>, and check
+       the ${fmt(S.square)} ${uLabel()} square shows evenly at head, tail and fore edge. Press
+       it down without sliding it: sliding smears glue where it does not belong and you get one
+       attempt. Then close that cover, turn the whole thing over, and repeat on the back.</p>
+
+    <p><b>Press overnight</b> with a strip of something slim laid into each joint, so the cloth
+       is pushed down into the hinge rather than bridging across it. A knitting needle, a
+       pencil, the spine of a butter knife. That groove is what makes the book look bound
+       rather than glued.</p>
+
     <p style="color:#6B6B72;font-size:7.5pt;margin-top:5mm">Square, joint gap, hinge
        allowance, turn-in and mitre clearance are conventions rather than rules. They
        are all adjustable in The Bindery if your own practice differs.</p>
