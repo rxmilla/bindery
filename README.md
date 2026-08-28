@@ -35,6 +35,13 @@ recomputed or the browser will refuse to run the page and it will load blank.**
 
 ## Licence
 
-Not yet decided. The embedded typefaces are all under the SIL Open Font
-License: Archivo, Fraunces, Outfit, Atkinson Hyperlegible, Libre Caslon Text,
-Libre Franklin, Bitter, Cabin, and IBM Plex Mono.
+Code: **GNU Affero General Public License v3** (`LICENSE`). You may use, change
+and share it; changes stay under the same licence, and anyone who runs a
+modified version for other people over a network must offer them its source.
+
+The name **The Bindery** is reserved and is not covered by that licence. See
+`NOTICE.md`.
+
+The embedded typefaces are under the SIL Open Font License: Archivo, Fraunces,
+Outfit, Atkinson Hyperlegible, Libre Caslon Text, Libre Franklin, Bitter,
+Cabin, and IBM Plex Mono.

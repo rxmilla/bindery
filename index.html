@@ -1,4 +1,18 @@
 <meta charset="utf-8">
+<!--
+  The Bindery · https://thebindery.org
+  Copyright (c) 2026 The Bindery
+
+  Licensed under the GNU Affero General Public License, version 3.
+  You may use, study, change and share this. Changes stay under the same
+  licence, and if you run a modified version for other people over a network
+  you must offer them its source.
+
+  "The Bindery" is a name, not part of that licence. Fork the code, use your
+  own name.
+
+  Source: https://github.com/rxmilla/bindery
+-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Bindery talks to nothing except the font service, so it says so outright.
      connect-src 'none' is the important line: it blocks fetch, XHR and web
@@ -930,6 +944,9 @@ table.cut tr:last-child td { border-bottom: 0; }
 .wb-grid div { display: flex; flex-direction: column; gap: 5px; }
 .wb-grid b { font-size: 15px; font-weight: 600; color: var(--ink); }
 .wb-grid span { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.wb-foot { margin: 26px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-3);
+  border-top: 1px solid var(--line); padding-top: 16px; }
+.wb-foot a { color: var(--accent); }
 
 /* ============================================================= preview === */
 .pvhead { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
@@ -1407,6 +1424,10 @@ footer a:hover { color: var(--peacock-2); }
           <div><b>Instructions with your numbers</b><span>Every step from printing to casing in, written around your book rather than a generic one.</span></div>
           <div><b>Nothing sent anywhere</b><span>It runs in this browser. No account, no upload, no cost, and once the page has loaded it needs no connection at all.</span></div>
         </div>
+        <p class="wb-foot">The Bindery is free and open source under the
+          <a href="https://github.com/rxmilla/bindery/blob/main/LICENSE">AGPL</a>.
+          Fork it, change it, share it. The name is reserved, so please give your
+          version one of your own.</p>
       </div>
     </section>
 
