@@ -4,7 +4,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-0bYTQFdZjIxPN1vbD6G1UAW/MFNal8nYyGf4YTHGY6E='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-/lGtIq5thn9HfaPU9QSVCROQqXPFGXSYYs+oOzC1OE0='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -3646,13 +3646,13 @@ ${chk("focus", "Focus area")}
 
   { t: "You made a book AND you let us help!",
     hideNext: true,
-    lead: "Congratulations! And thank you so much. We are humbled by your labor and are grateful that you trusted The Bindery to guide you through making your very own planner completely from scratch.",
+    lead: "Congratulations! And thank you so much. We are humbled by your labor and are grateful that you trusted The Bindery to guide you through making your very own book completely from scratch.",
     body: D => `
     ${hint("You designed it, printed it, folded and sewed every signature, and cased it in cloth by hand. How cool. Now what?")}
-    ${hint("<b>Use it!</b> Write in it. Scribble in it. Doodle in it, highlight in it, live in it.")}
+    ${hint("<b>Use it!</b> Write in it. Read it. Scribble in it. Doodle in it, highlight in it, live in it.")}
     ${hint("<b>Make another one.</b> A pocket-sized book for a bag, a wide one for a desk, a single month as a gift, or the same book again next season with the trackers you realized you wished you had this time. Now that you know the flow, the next one takes minutes to set up and construction gets easier with each iteration.")}
-    ${hint("<b>Pass it along.</b> The Bindery runs entirely in your browser and costs nothing, so sharing it is just sharing a link. Somebody you know keeps a paper planner and grumbles that none of them are quite right.")}
-    ${hint("<b>Show it off.</b> Photograph the cover, the spine, the first page you write on. A hand-bound book photographs beautifully, and yours is the only one exactly like it.")}
+    ${hint("<b>Pass it along.</b> The Bindery runs entirely in your browser and costs nothing, so sharing it is just sharing a link.")}
+    ${hint("<b>Show it off.</b> Photograph the cover, the spine, the first page. A hand-bound book photographs beautifully, and yours is the only one exactly like it.")}
     <button class="btn primary big" data-act="wizfirst">Make another book</button>` },
 ];
 
