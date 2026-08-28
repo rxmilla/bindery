@@ -4,7 +4,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-HOyeCr96/HQgGoWwnvJtiKxlGa6bQ0T90wyJuifG1z4='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-vtljioY7Bt2u0Xu5EqXeTLXlphTnHA+WZugzf0j782I='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -1930,12 +1930,33 @@ function parseICS(text) {
     else if (name === "DTEND") cur.end = val;
     else if (name === "SUMMARY") cur.summary = icsUnescape(val);
     else if (name === "RRULE") cur.rrule = val;
-    else if (name === "EXDATE") for (const v of val.split(",")) cur.ex.push(v.trim().slice(0, 8));
+    else if (name === "EXDATE") for (const v of val.split(",")) {
+      const t = v.trim();
+      const d = icsDay(t);
+      cur.ex.push(`${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, "0")}${
+        String(d.getUTCDate()).padStart(2, "0")}`);
+    }
   }
   return out;
 }
 
-const icsDay = v => new Date(Date.UTC(+v.slice(0, 4), +v.slice(4, 6) - 1, +v.slice(6, 8)));
+/* The date an event belongs on.
+
+   For an all-day entry, a floating time, or a time in a named zone, the date
+   written in the file is already the right one and is used as it stands.
+
+   A time ending in Z is different: it is an instant in UTC, and near midnight
+   that instant falls on a different calendar day where the reader lives.
+   3am UTC on 11 September is the evening of the 10th in Los Angeles. Those are
+   converted to the reader's own date. */
+const icsDay = v => {
+  const m = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/.exec(String(v));
+  if (m) {
+    const local = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]));
+    return new Date(Date.UTC(local.getFullYear(), local.getMonth(), local.getDate()));
+  }
+  return new Date(Date.UTC(+v.slice(0, 4), +v.slice(4, 6) - 1, +v.slice(6, 8)));
+};
 const dayKey = d => `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${
   String(d.getUTCDate()).padStart(2, "0")}`;
 const ICS_WD = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
@@ -3247,9 +3268,11 @@ function renderWizard(rail, D) {
 const STEPS = [
   { t: "Let's set up some preferences.", pv: "month",
     pvAlt: () => textbook() ? "text" : notebook() ? "pages" : "month",
-    lead: D => notebook()
-      ? "A blank notebook has no dates in it, so you decide how long it is. Pages are rounded up to fill the last fold."
-      : "A dated planner runs from a start month for as many months as you want. A month is added whole, so the book begins on the first and ends on the last.",
+    lead: D => S.textMode
+      ? "Upload a book: a novel, a collection of poems, essays, something you wrote, something from Project Gutenberg, whatever!"
+      : notebook()
+        ? "A blank notebook has no dates in it, so you decide how long it is. Pages are rounded up to fill the last fold."
+        : "A dated planner runs from a start month for as many months as you want. A month is added whole, so the book begins on the first and ends on the last.",
     tag: D => notebook()
       ? `<span class="hint">${D.pages.length} pages</span>`
       : `<span class="hint" data-hint="days">${D.days} days</span>`,
@@ -3379,7 +3402,7 @@ const STEPS = [
           <button class="linky" data-act="icsclear">Remove it</button>
         </div></div>` : ""}
     ${chk("icsAllDayOnly", "All-day events only")}
-    ${hint("All-day entries are the ones worth binding into a book. Allowing timed events may cause issues with time zones.")}
+    ${hint("All-day entries are the ones worth binding into a book: holidays, school breaks, trips, birthdays. Timed events move around, and a book printed weeks ahead would carry them out of date. Clear this to bring everything in.")}
     ${ICS.events.length ? chk("icsShow", "Print them in the book") : ""}` },
 
   { t: "Set up personal schedule and trackers for your daily pages.", pv: "day",
