@@ -4,7 +4,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-/lGtIq5thn9HfaPU9QSVCROQqXPFGXSYYs+oOzC1OE0='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-XNhs+tqlXp8b2W66BqaLJxYyWQ/MLbFbgFiHOsuv/3c='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -3253,10 +3253,10 @@ function renderLanding(rail) {
   rail.innerHTML = `
   <div class="wiz land">
     <h2 class="wiz-q" id="wiz-q" tabindex="-1">Welcome to The Bindery</h2>
-    <p class="wiz-lead">The Bindery helps you make a journal you actually want, by hand and from
-      scratch! Generate printable files for your journal pages customized to your exact
-      preferences with step-by-step instructions to build a book by hand: the pages laid out
-      in folding order, a punching template for sewing, and a case template drawn to your own
+    <p class="wiz-lead">The Bindery helps you make a book by hand and from scratch! Generate
+      printable files for your book, day planner, or journal pages customized to your exact
+      preferences with step-by-step instructions to build by hand: the pages laid out in
+      folding order, a punching template for sewing, and a case template drawn to your own
       measurements.</p>
     <p class="wiz-lead">You decide what goes on every page. Nothing is uploaded, nothing
       needs an account, and it costs nothing.</p>
@@ -3743,15 +3743,10 @@ function cardsHtml(only) {
         btn || `Print ${h.toLowerCase()}`}</button></div>`).join("");
 }
 
-function renderOuts() {
-  buildCalendarNames();
-  buildICSMap();
-  document.getElementById("outs").innerHTML = cardsHtml();
-  /* While the walkthrough is running the printing lives inside the steps, so
-     the standing panel would be a second, competing place to press print. */
-  document.getElementById("printblock").hidden = WIZ.on;
-  /* On the way in there is nothing worth previewing, so the space explains the
-     tool instead of showing an empty sheet. */
+/* Which of the two right-hand panels is showing. This lives on its own because
+   every path that changes WIZ.landing has to call it, and one that only redrew
+   the rail used to leave the empty preview sitting there. */
+function syncPanels() {
   const wb = document.getElementById("welcomeblock"), pv = document.getElementById("pvblock");
   if (wb && pv) { wb.hidden = !WIZ.landing; pv.hidden = !!WIZ.landing; }
   /* The specification counts sheets and signatures for a book nobody has asked
@@ -3759,6 +3754,16 @@ function renderOuts() {
   const sp = document.getElementById("spec"), ft = document.getElementById("foot");
   if (sp) sp.hidden = !!WIZ.landing;
   if (ft) ft.hidden = !!WIZ.landing;
+}
+
+function renderOuts() {
+  buildCalendarNames();
+  buildICSMap();
+  document.getElementById("outs").innerHTML = cardsHtml();
+  /* While the walkthrough is running the printing lives inside the steps, so
+     the standing panel would be a second, competing place to press print. */
+  document.getElementById("printblock").hidden = WIZ.on;
+  syncPanels();
 
   document.getElementById("foot").innerHTML = S.singleSided
     ? `<b>Two-pass printing.</b> Run the duplex test first. It costs two sheets and tells you what ${D.sheets} sheets
@@ -4035,6 +4040,7 @@ document.addEventListener("click", e => {
     if (WIZ.on && cur) { const want = cur.pvAlt ? cur.pvAlt() : cur.pv; if (want) PV = want; }
     renderRail();
     renderPreview();
+    syncPanels();
     /* Moving focus to the new heading is what tells a screen reader the step
        changed; without it the reader is left on a button that no longer exists. */
     const h = document.getElementById("wiz-q");
