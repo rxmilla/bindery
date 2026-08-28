@@ -4,7 +4,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-vtljioY7Bt2u0Xu5EqXeTLXlphTnHA+WZugzf0j782I='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-0bYTQFdZjIxPN1vbD6G1UAW/MFNal8nYyGf4YTHGY6E='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -1063,6 +1063,10 @@ footer a:hover { color: var(--peacock-2); }
 .dp .txt p.h:first-child { margin-top: 0; }
 /* A chapter opening drops down the page, the way a book does. */
 .dp .txt.opener > p.h:first-child { margin-top: 18mm; margin-bottom: 4mm; font-size: 1.05em; }
+.dp .sched-ev { display: flex; flex-wrap: wrap; gap: 0 3mm; flex: 1; min-width: 0;
+  padding: .3mm 0 0 1mm; }
+.dp .sched-ev span { font-size: 6.2pt; color: var(--label); letter-spacing: .01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .dp .ev-strip { display: flex; flex-wrap: wrap; gap: 1mm 3mm; margin: 1.2mm 0 0; }
 .dp .ev-strip span { font-size: 6.5pt; color: var(--label); letter-spacing: .02em; }
 .dp .wk-day .ev-strip { padding: 0 1.6mm 0; margin-top: .8mm; }
@@ -1926,7 +1930,14 @@ function parseICS(text) {
     if (c < 0) continue;
     const left = line.slice(0, c), val = line.slice(c + 1).trim();
     const name = left.split(";")[0].toUpperCase();
-    if (name === "DTSTART") { cur.start = val; cur.allDay = /^\d{8}$/.test(val); }
+    if (name === "DTSTART") {
+      cur.start = val;
+      cur.allDay = /^\d{8}$/.test(val);
+      /* Remember the hour and minute so a timed event can sit on the schedule at
+         the time it happens rather than floating above the day. */
+      const hm = icsHourMin(val);
+      if (hm) { cur.h = hm[0]; cur.m = hm[1]; }
+    }
     else if (name === "DTEND") cur.end = val;
     else if (name === "SUMMARY") cur.summary = icsUnescape(val);
     else if (name === "RRULE") cur.rrule = val;
@@ -1949,6 +1960,19 @@ function parseICS(text) {
    that instant falls on a different calendar day where the reader lives.
    3am UTC on 11 September is the evening of the 10th in Los Angeles. Those are
    converted to the reader's own date. */
+/* Local hour and minute of a timed event, or null for an all-day entry. A Z
+   time is an instant, so it is converted to the reader's clock; anything else
+   is already a local wall time. */
+const icsHourMin = v => {
+  const z = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/.exec(String(v));
+  if (z) {
+    const d = new Date(Date.UTC(+z[1], +z[2] - 1, +z[3], +z[4], +z[5], +z[6]));
+    return [d.getHours(), d.getMinutes()];
+  }
+  const t = /^\d{8}T(\d{2})(\d{2})/.exec(String(v));
+  return t ? [+t[1], +t[2]] : null;
+};
+
 const icsDay = v => {
   const m = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/.exec(String(v));
   if (m) {
@@ -2017,12 +2041,17 @@ function buildICSMap() {
   if (!range.length) return;
   const from = range[0], to = range[range.length - 1];
 
-  const add = (d, text) => {
+  const add = (d, text, h, m) => {
     if (dnum(d) < dnum(from) || dnum(d) > dnum(to)) return;
     const k = dayKey(d);
     let arr = ICS_MAP.get(k);
     if (!arr) { arr = []; ICS_MAP.set(k, arr); }
-    if (arr.length < 4 && !arr.includes(text)) { arr.push(text); ICS.count++; }
+    /* Timed entries are worth more room than all-day ones, because they are the
+       ones a person actually needs to see against the hour. */
+    if (arr.length < 8 && !arr.some(e => e.t === text)) {
+      arr.push({ t: text, h, m });
+      ICS.count++;
+    }
   };
 
   for (const ev of ICS.events) {
@@ -2036,7 +2065,7 @@ function buildICSMap() {
       ? Math.min(60, Math.max(1, Math.round((dnum(icsDay(ev.end)) - dnum(s0)) / 86400000))) : 1;
     const place = st => {
       if (ex.has(st.toISOString().slice(0, 10).replace(/-/g, ""))) return;
-      for (let k = 0; k < span; k++) add(addDays(st, k), text);
+      for (let k = 0; k < span; k++) add(addDays(st, k), text, ev.h, ev.m);
     };
     if (!ev.rrule) { place(s0); continue; }
     const R = {};
@@ -2128,17 +2157,34 @@ function openPage(title, sub, extra) {
 }
 
 /* Imported days print as a small line, wherever the day appears. */
+const evText = e => (e.h == null ? "" : timeLabel(e.h, e.m) + " ") + e.t;
+
+const timeLabel = (h, m) => S.clock24
+  ? String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0")
+  : (h % 12 === 0 ? 12 : h % 12) + (m ? ":" + String(m).padStart(2, "0") : "") + (h < 12 ? "a" : "p");
+
+/* Above the day: the all-day entries, plus any timed ones that fall outside the
+   hours the schedule covers, so nothing is silently dropped. */
 const evStrip = d => {
-  const e = eventsOn(d);
-  return e.length ? `<div class="ev-strip">${e.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : "";
+  const e = eventsOn(d).filter(x => x.h == null || !S.schedule
+    || x.h < S.schedStart || x.h > S.schedEnd);
+  return e.length ? `<div class="ev-strip">${
+    e.map(x => `<span>${esc(evText(x))}</span>`).join("")}</div>` : "";
 };
 
 function dayLeft(d) {
   if (!S.schedule) return openPage(`${d.getUTCDate()} ${WD_FULL[isoWeekday(d)]}`,
     `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`, evStrip(d));
+  /* An imported event is printed faintly against its own hour, so the line is
+     still yours to write on. */
+  const timed = eventsOn(d).filter(x => x.h != null);
   let rows = "";
-  for (let h = S.schedStart; h <= S.schedEnd; h++)
-    rows += `<div class="sched-row"><div class="sched-t">${hourLabel(h)}</div></div>`;
+  for (let h = S.schedStart; h <= S.schedEnd; h++) {
+    const here = timed.filter(x => x.h === h);
+    rows += `<div class="sched-row"><div class="sched-t">${hourLabel(h)}</div>${
+      here.length ? `<div class="sched-ev">${
+        here.map(x => `<span>${esc(evText(x))}</span>`).join("")}</div>` : ""}</div>`;
+  }
   return `<div class="day-hdr">
       <div class="day-num">${d.getUTCDate()}</div>
       <div class="day-name">${WD_FULL[isoWeekday(d)]}</div>
@@ -2335,7 +2381,7 @@ function monthEventRows(year, month) {
     if (d.getUTCFullYear() !== year || d.getUTCMonth() !== month) continue;
     const e = eventsOn(d);
     if (e.length) rows.push(`<div class="rule"><div class="lbl-s" style="width:14mm;color:var(--label);font-size:6.5pt">${
-      WD_ABBR[isoWeekday(d)]} ${d.getUTCDate()}</div>${esc(e.join(" \u00b7 "))}</div>`);
+      WD_ABBR[isoWeekday(d)]} ${d.getUTCDate()}</div>${esc(e.map(evText).join(" \u00b7 "))}</div>`);
   }
   return rows.join("");
 }
@@ -3402,7 +3448,7 @@ const STEPS = [
           <button class="linky" data-act="icsclear">Remove it</button>
         </div></div>` : ""}
     ${chk("icsAllDayOnly", "All-day events only")}
-    ${hint("All-day entries are the ones worth binding into a book: holidays, school breaks, trips, birthdays. Timed events move around, and a book printed weeks ahead would carry them out of date. Clear this to bring everything in.")}
+    ${hint("On by default, which brings in holidays, school breaks, trips and birthdays. Clear it to bring in your timed events as well: meetings, appointments, anything with a time on it.")}
     ${ICS.events.length ? chk("icsShow", "Print them in the book") : ""}` },
 
   { t: "Set up personal schedule and trackers for your daily pages.", pv: "day",
