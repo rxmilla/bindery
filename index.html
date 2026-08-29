@@ -18,7 +18,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-RFnjBJ9aC9+Ndfdg1Bj/YroUTXxQZfceOcyy2lYya2s='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-f8rSlirabq/tVaau3zClXZpRhcb0HxDnZkdjNce8Fao='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -907,6 +907,8 @@ table.cut tr:last-child td { border-bottom: 0; }
 .step-outs { grid-template-columns: 1fr; margin: 4px 0; }
 .land .btn { margin-top: 6px; }
 .land-note { margin: 7px 2px 16px; font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+/* So it is always possible to tell which copy a browser is actually running. */
+.land-ver { margin: 20px 2px 0; font-size: 12px; color: var(--ink-3); font-family: var(--f-mono); }
 .steps {
   margin: 0; padding-left: 21px; display: flex; flex-direction: column;
   gap: 12px; font-size: 14.5px; line-height: 1.5; color: var(--ink-2);
@@ -3294,6 +3296,7 @@ function renderLanding(rail) {
     <button class="btn primary big" data-act="gobook">I want to make a book!</button>
     ${WIZ.step > 0 ? `<p class="land-note"><button class="linky" data-act="wizresume">Pick up where you left off, at step ${
       WIZ.step + 1}</button></p>` : ""}
+    <p class="land-ver">Version <span id="buildver">2026-08-28 20:14</span></p>
     <div class="wiz-links">
       <button class="linky" data-act="wizall">Skip this and show me all settings</button>
     </div>
