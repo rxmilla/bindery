@@ -9,8 +9,8 @@ text is in `LICENSE`.
 
 In plain terms, you may use, study, change and share this, and you must:
 
-- keep the copyright notice and this licence on any copy
-- release your changes under the same licence
+- keep the copyright notice and this license on any copy
+- release your changes under the same license
 - **make your source available to anyone who uses your version over a
   network**, not only to people you hand a copy to
 
@@ -23,7 +23,7 @@ Selling it is permitted. Selling it while keeping the source closed is not.
 
 ## The name
 
-**"The Bindery" and "thebindery.org" are not covered by the licence above.**
+**"The Bindery" and "thebindery.org" are not covered by the license above.**
 Trademarks are separate from copyright, and no permission to use them is
 granted here.
 
@@ -43,6 +43,6 @@ Mono. The OFL permits embedding in a document or application like this one.
 ## What this cannot do
 
 Every visitor's browser already downloads the whole application, because that
-is how a web page works. A licence does not prevent copying; it establishes
+is how a web page works. A license does not prevent copying; it establishes
 what is permitted and gives a claim when someone exceeds it. It is a deterrent
 for anyone operating in the open, which is most people who matter.
