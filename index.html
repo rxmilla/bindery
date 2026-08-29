@@ -18,7 +18,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-XNhs+tqlXp8b2W66BqaLJxYyWQ/MLbFbgFiHOsuv/3c='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-JWvjycr1PP+BoiyZUinSOKHAXF+228oBM/oNk1umBvg='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -3424,6 +3424,12 @@ const STEPS = [
       <button data-v="lines" aria-pressed="${S.fill === "lines"}">Lines</button>
       <button data-v="blank" aria-pressed="${S.fill === "blank"}">Blank</button></div>`,
       "Choose the format for all space for notes.")}
+    ${field("Style", sel("style", [["detroit", "Detroit"], ["portland", "Portland"],
+                                    ["boston", "Boston"], ["annarbor", "Ann Arbor"],
+                                    ["normcore", "Normcore"]]),
+      S.style === "annarbor"
+        ? "Ann Arbor sets the whole book in Atkinson Hyperlegible, drawn so letters which mirror each other, like b and d, cannot be confused. Left aligned and loosely spaced, with a tree on the title page."
+        : "Runs through the whole book: the type, the rules, the headings, and the title page. Switch the preview tabs above to see it on a day, week or month page.")}
     ${field("Week starts", `<div class="seg" data-seg="sundayGrid">
       <button data-v="true" aria-pressed="${S.sundayGrid}">Sunday</button>
       <button data-v="false" aria-pressed="${!S.sundayGrid}">Monday</button></div>`,
@@ -3443,12 +3449,7 @@ const STEPS = [
     <button class="btn" data-act="usedates">Put ${esc(dateRangeText())} in line 5</button>
     ${optOut("titlePage", "I do not want a title page")}
     ${hint("Page 1 is a right-hand page. Without a title page it is left blank rather than removed, so every spread after it still lands on the correct side.")}
-    ${field("Style", sel("style", [["detroit", "Detroit"], ["portland", "Portland"],
-                                    ["boston", "Boston"], ["annarbor", "Ann Arbor"],
-                                    ["normcore", "Normcore"]]),
-      S.style === "annarbor"
-        ? "Ann Arbor sets the whole book in Atkinson Hyperlegible, drawn so letters which mirror each other, like b and d, cannot be confused. Left aligned and loosely spaced, with a tree on the title page."
-        : "Apply a style for text throughout your book.")}` },
+` },
 
   { t: "Import your calendar events if you so choose.", pv: "month",
     skip: () => dateless(),
