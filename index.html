@@ -18,7 +18,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yJBxfM0MGvaYWgdaOShTwgsjnvozsp/Ax0oCKa/m2T8='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ztU79DpyHNQGIPrvGwS7Z5Xt/t8578JVlqYvvWCPy0U='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -3296,7 +3296,7 @@ function renderLanding(rail) {
     <button class="btn primary big" data-act="gobook">I want to make a book!</button>
     ${WIZ.step > 0 ? `<p class="land-note"><button class="linky" data-act="wizresume">Pick up where you left off, at step ${
       WIZ.step + 1}</button></p>` : ""}
-    <p class="land-ver">Version <span id="buildver">2026-08-28 20:18</span></p>
+    <p class="land-ver">Version <span id="buildver">2026-08-28 20:25</span></p>
     <div class="wiz-links">
       <button class="linky" data-act="wizall">Skip this and show me all settings</button>
     </div>
@@ -3893,7 +3893,11 @@ function renderAll() { buildICSMap(); renderRail(); renderSpec(); renderOuts(); 
 buildCalendarNames();
 document.getElementById("glossary-defs").innerHTML = glossaryDefs();
 
-document.addEventListener("input", e => {
+/* Settings changes arrive as "input" from text fields and checkboxes. A dropdown
+   is different: "change" is the event every browser fires for one, while "input"
+   is newer and is not guaranteed, particularly when the value is chosen with the
+   keyboard. Listening only for "input" left the preview a step behind. */
+function onSettingChange(e) {
   const neg = e.target.dataset.neg;
   if (neg) {
     const want = !e.target.checked;
@@ -3928,6 +3932,13 @@ document.addEventListener("input", e => {
     if (back) back.focus();
   } else updateHints();
   renderSpec(); renderOuts(); renderPreview();
+}
+
+document.addEventListener("input", onSettingChange);
+/* Only dropdowns, because a text field fires "change" on blur and "input" has
+   already dealt with it. */
+document.addEventListener("change", e => {
+  if (e.target.tagName === "SELECT") onSettingChange(e);
 });
 
 function applyStepHash() {
