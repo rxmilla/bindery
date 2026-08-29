@@ -18,7 +18,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-f8rSlirabq/tVaau3zClXZpRhcb0HxDnZkdjNce8Fao='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yJBxfM0MGvaYWgdaOShTwgsjnvozsp/Ax0oCKa/m2T8='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -3296,7 +3296,7 @@ function renderLanding(rail) {
     <button class="btn primary big" data-act="gobook">I want to make a book!</button>
     ${WIZ.step > 0 ? `<p class="land-note"><button class="linky" data-act="wizresume">Pick up where you left off, at step ${
       WIZ.step + 1}</button></p>` : ""}
-    <p class="land-ver">Version <span id="buildver">2026-08-28 20:14</span></p>
+    <p class="land-ver">Version <span id="buildver">2026-08-28 20:18</span></p>
     <div class="wiz-links">
       <button class="linky" data-act="wizall">Skip this and show me all settings</button>
     </div>
@@ -3346,7 +3346,7 @@ function renderWizard(rail, D) {
 
 /* ============================================================== steps === */
 const STEPS = [
-  { t: "Let's set up some preferences.", pv: "month",
+  { t: "What kind of book would you like to make? Select one.", pv: "month",
     pvAlt: () => textbook() ? "text" : notebook() ? "pages" : "month",
     lead: D => S.textMode
       ? "Upload a book: a novel, a collection of poems, essays, something you wrote, something from Project Gutenberg, whatever!"
