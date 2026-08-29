@@ -18,7 +18,7 @@
      connect-src 'none' is the important line: it blocks fetch, XHR and web
      sockets entirely, so even a flaw that ran code here could not send a
      visitor's calendar, text or settings anywhere. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-JWvjycr1PP+BoiyZUinSOKHAXF+228oBM/oNk1umBvg='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-RFnjBJ9aC9+Ndfdg1Bj/YroUTXxQZfceOcyy2lYya2s='; style-src 'unsafe-inline'; font-src data:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The Bindery</title>
 
 <style>
@@ -1182,6 +1182,8 @@ footer a:hover { color: var(--peacock-2); }
 /* Its title page carries a tree, drawn as line art so a mono laser prints it
    cleanly at any size. */
 .dp .aa-page { text-align: center; padding-top: 34mm; }
+/* Sample lines read as a suggestion rather than as content. */
+.dp .deco-page.sample { opacity: .45; }
 .dp .aa-tree { display: block; margin: 0 auto 9mm; }
 .dp .aa-name { font-size: 19pt; font-weight: 700; letter-spacing: .01em; line-height: 1.22; }
 .dp .aa-rule { width: 34mm; height: .5mm; background: var(--hair); margin: 5mm auto; }
@@ -2108,16 +2110,24 @@ function buildICSMap() {
 
 const eventsOn = d => (S.icsShow && ICS_MAP.get(dayKey(d))) || [];
 
-function titlePage() {
-  const all = [S.title, S.owner, S.contact1, S.contact2, S.contact3]
+/* Sample lines so the style is visible before anything is typed. They are shown
+   in the preview only and are never printed, or a blank title page would come
+   out of the printer saying "Your title". */
+const TITLE_SAMPLE = ["Your title", "Your name", "you@example.com"];
+
+function titlePage(sample) {
+  let all = [S.title, S.owner, S.contact1, S.contact2, S.contact3]
     .map(l => String(l == null ? "" : l).trim()).filter(Boolean);
+  const isSample = sample && !all.length;
+  if (isSample) all = TITLE_SAMPLE.slice();
   const head = all[0] || "", second = all[1] || "", rest = all.slice(2);
+  const sc = isSample ? " sample" : "";
 
   /* The tree belongs to the style, not to the text, so it is there whether or
      not any of the five lines have been filled in. */
   if (S.style === "annarbor") {
     const lines = all.slice(1);
-    return `<div class="deco-page aa-page">
+    return `<div class="deco-page aa-page${sc}">
       <svg class="aa-tree" width="34mm" height="38mm" viewBox="0 0 68 76" fill="none"
            stroke="#16161A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="34" cy="24" r="17"/>
@@ -2134,12 +2144,12 @@ function titlePage() {
     </div>`;
   }
 
-  if (!all.length) return `<div class="deco-page"></div>`;
+  if (!all.length) return `<div class="deco-page${sc}"></div>`;
 
   if (S.style === "detroit") {
     const lines = all.slice(1)
       .map(l => `<div class="deco-line">${esc(l)}</div>`).join("");
-    return `<div class="deco-page">
+    return `<div class="deco-page${sc}">
       <div class="deco top"><i style="width:52mm"></i><i style="width:38mm"></i><i style="width:24mm"></i></div>
       <div class="deco-name">${esc(head)}</div>
       <div class="deco-bar"></div>${lines}
@@ -2147,7 +2157,7 @@ function titlePage() {
     </div>`;
   }
   if (S.style === "boston") {
-    return `<div class="deco-page">
+    return `<div class="deco-page${sc}">
       <div class="bo-title">${esc(head)}</div>
       <div class="bo-rule"></div>
       ${second ? `<div class="bo-sub">${esc(second)}</div>` : ""}
@@ -2155,14 +2165,14 @@ function titlePage() {
     </div>`;
   }
   if (S.style === "portland") {
-    return `<div class="deco-page">
+    return `<div class="deco-page${sc}">
       <div class="pl-title">${esc(head)}</div>
       <div class="pl-rule"></div>
       ${second ? `<div class="pl-sub">${esc(second)}</div>` : ""}
       ${rest.length ? `<div class="pl-block">${rest.map(l => `<div class="pl-line">${esc(l)}</div>`).join("")}</div>` : ""}
     </div>`;
   }
-  return `<div class="deco-page">
+  return `<div class="deco-page${sc}">
     <div class="plain-t">${esc(head)}</div>
     <div class="plain-hr"></div>
     ${second ? `<div class="plain-s">${esc(second)}</div>` : ""}
@@ -3424,12 +3434,6 @@ const STEPS = [
       <button data-v="lines" aria-pressed="${S.fill === "lines"}">Lines</button>
       <button data-v="blank" aria-pressed="${S.fill === "blank"}">Blank</button></div>`,
       "Choose the format for all space for notes.")}
-    ${field("Style", sel("style", [["detroit", "Detroit"], ["portland", "Portland"],
-                                    ["boston", "Boston"], ["annarbor", "Ann Arbor"],
-                                    ["normcore", "Normcore"]]),
-      S.style === "annarbor"
-        ? "Ann Arbor sets the whole book in Atkinson Hyperlegible, drawn so letters which mirror each other, like b and d, cannot be confused. Left aligned and loosely spaced, with a tree on the title page."
-        : "Runs through the whole book: the type, the rules, the headings, and the title page. Switch the preview tabs above to see it on a day, week or month page.")}
     ${field("Week starts", `<div class="seg" data-seg="sundayGrid">
       <button data-v="true" aria-pressed="${S.sundayGrid}">Sunday</button>
       <button data-v="false" aria-pressed="${!S.sundayGrid}">Monday</button></div>`,
@@ -3440,6 +3444,12 @@ const STEPS = [
     lead: "Everything here is optional and only affects the title page. The title also names the printed binding guide.",
     body: D => `
 
+    ${field("Style", sel("style", [["detroit", "Detroit"], ["portland", "Portland"],
+                                    ["boston", "Boston"], ["annarbor", "Ann Arbor"],
+                                    ["normcore", "Normcore"]]),
+      S.style === "annarbor"
+        ? "Ann Arbor sets the whole book in Atkinson Hyperlegible, drawn so letters which mirror each other, like b and d, cannot be confused. Left aligned and loosely spaced, with a tree on the title page."
+        : "Runs through the whole book, not only this page: the type, the rules and the headings on every day, week and month page too. The preview shows sample lines until you type your own.")}
     ${field("Line 1", txt("title", "Title"))}
     ${field("Line 2", txt("owner", "Name"))}
     ${field("Line 3", txt("contact1", "Email"))}
@@ -3834,7 +3844,9 @@ function renderPreview() {
   else if (PV === "day")   { panes = [[dayLeft(sample), "verso"], [dayRight(sample), "recto"]]; cap = "Day spread"; }
   else if (PV === "week")  { panes = [[weekLeft(mon), "verso"], [weekRight(mon), "recto"]]; cap = "Week spread"; }
   else if (PV === "month") { panes = [[monthLeft(sample.getUTCFullYear(), sample.getUTCMonth()), "verso"], [monthRight(sample.getUTCFullYear(), sample.getUTCMonth()), "recto"]]; cap = "Month spread"; }
-  else if (PV === "title") { panes = [[titlePage(), "recto"]]; cap = "Title page"; }
+  else if (PV === "title") { panes = [[titlePage(true), "recto"]]; cap = S.titlePage
+    ? (S.title || S.owner || S.contact1 || S.contact2 || S.contact3 ? "Title page" : "Title page \u00b7 sample text, not printed")
+    : "Title page turned off"; }
   else { wide = true; cap = `First printed sheet, pages ${D.sides[0].l + 1} and ${D.sides[0].r + 1} side by side`; }
 
   const stage = document.getElementById("stage");
